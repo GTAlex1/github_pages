@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GitHub · Orion Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--line:#30363d;--tx:#e6edf3;--mut:#8b949e;--blue:#428bbd;--blue2:#79b8e8;--ball:#e8703a;--ok:#3fb950;--red:#f85149;
+--h:'Bitter',Georgia,serif;--m:'JetBrains Mono',ui-monospace,Consolas,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{margin:0;background:var(--bg);color:var(--tx);font:17px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:var(--blue2)}a:focus-visible,button:focus-visible{outline:2px solid var(--ball);outline-offset:3px}
+code,pre{font-family:var(--m)}
+aside{position:fixed;inset:0 auto 0 0;width:270px;background:var(--panel);border-right:1px solid var(--line);padding:22px 14px;overflow:auto}
+aside h2{font:700 15px var(--m);color:var(--mut);margin:0 8px 14px}
+aside a{display:flex;gap:10px;padding:5px 8px;border-radius:6px;color:var(--tx);text-decoration:none;font-size:14.5px}
+aside a i{font:normal 12px var(--m);color:var(--mut);width:20px;padding-top:2px}
+aside a:hover{background:#21262d}aside a.on{background:#1f3347;box-shadow:inset 3px 0 var(--blue)}
+aside a.on i{color:var(--blue2)}
+main{margin-left:270px}
+section{min-height:100vh;padding:72px min(6vw,72px);display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid var(--line);max-width:1100px}
+h1,h2.t{font-family:var(--h);font-weight:800;line-height:1.08;margin:0 0 18px}
+h1{font-size:clamp(46px,8vw,96px)}h2.t{font-size:clamp(30px,4.4vw,52px)}
+h3{margin:0 0 6px;font-size:18px}p{margin:0 0 14px;max-width:62ch}.mut{color:var(--mut)}
+.num{font:600 14px var(--m);color:var(--blue2);margin-bottom:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:18px}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:18px}
+.box.b{border-top:3px solid var(--blue)}.box.o{border-top:3px solid var(--ball)}
+pre{background:#010409;border:1px solid var(--line);border-radius:8px;padding:16px;overflow-x:auto;font-size:14px;line-height:1.55;margin:16px 0 0}
+.c{color:var(--mut)}.k{color:#ff7b72}.s{color:#a5d6ff}
+.tag{display:inline-block;font:600 12.5px var(--m);padding:2px 10px;border-radius:99px;border:1px solid;margin:0 6px 6px 0}
+.steps{counter-reset:s;list-style:none;padding:0;margin:18px 0 0;display:grid;gap:10px}
+.steps li{counter-increment:s;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 16px 12px 56px;position:relative}
+.steps li:before{content:counter(s);position:absolute;left:14px;top:12px;width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;font:700 14px/28px var(--m);text-align:center}
+.ck{list-style:none;padding:0;margin:14px 0 0}.ck li{padding:5px 0 5px 28px;position:relative}.ck li:before{content:"✔";position:absolute;left:0;color:var(--ok)}
+/* HERO */
+#hero{background:radial-gradient(circle at 85% 12%,rgba(232,112,58,.18),transparent 40%),var(--bg)}
+.glitch{position:relative;display:inline-block}
+.glitch:before,.glitch:after{content:attr(data-t);position:absolute;inset:0;clip-path:inset(0 0 100% 0)}
+.glitch:before{color:#00f0d0;left:-4px}.glitch:after{color:#ff0033;left:4px}.glitch.go:before{animation:g1 .9s steps(1) 3}.glitch.go:after{animation:g2 .9s steps(1) 3}
+@keyframes g1{0%{clip-path:inset(10% 0 70% 0)}20%{clip-path:inset(60% 0 10% 0)}40%{clip-path:inset(30% 0 40% 0)}60%{clip-path:inset(80% 0 5% 0)}80%{clip-path:inset(0 0 90% 0)}100%{clip-path:inset(0 0 100% 0)}}
+@keyframes g2{0%{clip-path:inset(70% 0 5% 0)}25%{clip-path:inset(5% 0 80% 0)}50%{clip-path:inset(45% 0 30% 0)}75%{clip-path:inset(20% 0 60% 0)}100%{clip-path:inset(0 0 100% 0)}}
+.term{font:15px var(--m);color:var(--mut);margin:0 0 28px}.term b{color:var(--ok);font-weight:600}
+.idx{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,auto);grid-template-columns:repeat(2,minmax(240px,1fr));gap:6px 28px;list-style:none;padding:0;margin:26px 0 0;border-left:3px solid var(--blue);padding-left:22px}
+.idx a{color:var(--tx);text-decoration:none;font:600 15px var(--m);display:block;padding:3px 0}.idx a:hover{color:var(--blue2)}
+.idx .done{color:var(--mut);text-decoration:line-through}
+.tree{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 16px;margin-top:16px;font:14px var(--m)}
+.tree div{padding:7px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px}.tree div:last-child{border:0}
+.tree em{font-style:normal;color:var(--mut)}
+.top{display:none}
+@media(max-width:900px){aside{display:none}main{margin:0}.top{display:block;position:sticky;top:0;background:var(--panel);border-bottom:1px solid var(--line);padding:10px 16px;font:600 14px var(--m);z-index:5}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.glitch:before,.glitch:after{animation:none}}
+
+/* ---- v2: más movimiento ---- */
+.ball{width:130px;height:130px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f39a58,#c4501f 70%);position:relative;box-shadow:inset -10px -12px 24px rgba(0,0,0,.35)}
+.ball:before,.ball:after{content:"";position:absolute;background:#1b1b1b}
+.ball:before{left:49%;top:0;bottom:0;width:3%}.ball:after{top:49%;left:0;right:0;height:3%}
+#pb{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--blue),var(--ball));z-index:30}
+#pball{position:absolute;right:-12px;top:-10px;width:24px;height:24px;box-shadow:none}
+#cf{position:fixed;inset:0;pointer-events:none;z-index:40}
+#s1{position:relative;overflow:hidden;max-width:none;background-color:var(--bg);transition:background-color .7s}
+#s1:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 85% 12%,rgba(232,112,58,.18),transparent 40%);transition:opacity .7s;pointer-events:none}
+#s1>:not(#ballh){position:relative;max-width:1000px}
+#s1.canva{background-color:#428bbd}#s1.canva:before{opacity:0}
+#s1 h1{align-self:flex-start;transition:font-size .6s}#s1.canva h1{font-size:clamp(40px,6vw,64px)}
+#s1.canva .idx{border-color:#fff}#s1.canva .idx a{color:#fff;font:600 21px var(--h)}
+#s1.canva .idx li:not(.hide):before{content:"• ";color:#fff}
+.idx .hide{visibility:hidden}.idx a{min-height:1.6em}
+#ballh{position:absolute;left:56%;top:38%;z-index:3;pointer-events:none;opacity:0}
+.fall{animation:ballfall 2.4s forwards}
+@keyframes ballfall{0%{opacity:1;transform:translate(0,-70vh) rotate(0);animation-timing-function:cubic-bezier(.55,0,1,.45)}
+35%{opacity:1;transform:translate(0,0) rotate(300deg);animation-timing-function:cubic-bezier(0,.55,.45,1)}
+50%{opacity:1;transform:translate(50px,-130px) rotate(430deg);animation-timing-function:cubic-bezier(.55,0,1,.45)}
+65%{opacity:1;transform:translate(100px,0) rotate(600deg);animation-timing-function:cubic-bezier(0,.55,.45,1)}
+80%{opacity:1;transform:translate(160px,-50px) rotate(700deg);animation-timing-function:ease-in}
+100%{opacity:0;transform:translate(420px,-80vh) rotate(1000deg)}}
+body.shake main{animation:shk .55s}
+@keyframes shk{0%,100%{transform:none}15%{transform:translate(-12px,6px)}30%{transform:translate(10px,-8px)}45%{transform:translate(-8px,-4px)}60%{transform:translate(6px,6px)}80%{transform:translate(-3px,2px)}}
+#s1 .term{margin-top:24px;min-height:6.8em}.term .cmd{color:var(--tx)}.term .cmd:before{content:"$ ";color:var(--ok)}.term .out{color:var(--mut)}.cur{color:var(--ok)}
+#sub{opacity:0;transition:opacity .8s}#sub.on{opacity:1}
+.rv{opacity:0;transform:translateY(28px) scale(.95);transition:opacity .5s,transform .6s cubic-bezier(.2,1.5,.4,1);transition-delay:calc(var(--i,0)*90ms)}
+.steps li.rv{transform:translateX(-44px)}
+.in .rv,.in .steps li.rv{opacity:1;transform:none}
+.rv.rdy{transition:transform .2s,box-shadow .2s,border-color .2s,opacity .2s;transition-delay:0s}
+.box.rdy:hover{transform:translateY(-5px) rotate(-.5deg);box-shadow:0 12px 30px rgba(66,139,189,.28);border-color:var(--blue)}
+.ln{display:block;opacity:0;transform:translateX(-12px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*120ms)}
+.in .ln{opacity:1;transform:none}
+.ck li{opacity:0;transform:translateX(-14px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*150ms)}
+.ck li:before{transform:scale(0)}
+.in .ck li{opacity:1;transform:none}.in .ck li:before{transform:scale(1);transition:transform .45s cubic-bezier(.2,2.2,.4,1) calc(var(--i)*150ms + 250ms)}
+
+
+.btn{margin-top:18px;align-self:flex-start;background:#238636;color:#fff;border:1px solid rgba(240,246,252,.15);border-radius:8px;padding:10px 18px;font:600 15px system-ui;cursor:pointer}
+.btn:hover{background:#2ea043}.btn:active{transform:scale(.93)}.btn.merged{background:#8957e5}.btn.ghost{background:transparent;color:var(--mut);border-color:var(--line);font-size:13px}
+.pipe{display:flex;align-items:center;flex-wrap:wrap;margin-top:20px}
+.pipe span{font:600 14px var(--m);padding:10px 16px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--mut);transition:.3s}
+.pipe span.run{border-color:var(--ball);color:var(--ball)}.pipe span.run:after{content:"⟳";display:inline-block;margin-left:8px;animation:spin 1s linear infinite}
+.pipe span.ok{border-color:var(--ok);color:var(--ok);box-shadow:0 0 18px rgba(63,185,80,.4)}.pipe span.ok:after{content:"✔";margin-left:8px}
+.pipe b{width:34px;height:3px;background:var(--line);transition:background .3s}.pipe b.ok{background:var(--ok)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.bar{height:8px;background:var(--line);border-radius:9px;margin-top:16px;overflow:hidden;max-width:420px}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--ok))}
+.gh{color:#6e7681}.gh.ok{color:var(--tx)}.tabk{opacity:0;float:right;font:600 12px var(--m);border:1px solid var(--line);border-radius:5px;padding:0 8px;color:var(--mut);transition:.2s}.tabk.on{opacity:1;border-color:var(--ok);color:var(--ok)}
+#s14{position:relative}#fin{position:absolute;right:9%;bottom:12%;width:96px;height:96px;cursor:pointer;animation:bnc .9s infinite alternate;animation-timing-function:cubic-bezier(.5,0,1,.5)}
+@keyframes bnc{from{transform:translateY(-170px) rotate(0)}to{transform:translateY(0) rotate(200deg)}}
+@media(max-width:700px){.idx{grid-auto-flow:row;grid-template-rows:none;grid-template-columns:1fr}#fin{display:none}#ballh{width:80px;height:80px}}
+@media(prefers-reduced-motion:reduce){.rv,.ln,.ck li,.ck li:before{opacity:1!important;transform:none!important;transition:none!important}#s3 svg path{stroke-dashoffset:0;transition:none}#s3 svg circle{transform:none;transition:none}#fin{animation:none}}
+
+/* ---- v3: más visual ---- */
+section{position:relative;overflow:hidden}
+section[data-n]:after{content:attr(data-n);position:absolute;right:2%;top:6%;font:800 clamp(140px,26vw,340px)/1 var(--h);color:transparent;-webkit-text-stroke:2px rgba(121,184,232,.1);pointer-events:none;transform:translateY(calc(var(--py,0)*1px))}
+#glow{position:fixed;left:0;top:0;width:560px;height:560px;margin:-280px 0 0 -280px;border-radius:50%;background:radial-gradient(circle,rgba(66,139,189,.17),transparent 65%);pointer-events:none;z-index:1}
+#heat{display:grid;grid-template-rows:repeat(7,14px);grid-auto-flow:column;grid-auto-columns:14px;gap:4px;opacity:0;transition:opacity 1.5s}
+#s1>#heat{position:absolute;right:-30px;bottom:26px;max-width:none;z-index:0}
+#s1:not(.canva)>#heat{opacity:.6}
+.hc{border-radius:3px;background:#161b22;transition:background .6s}
+.hc[data-l="1"]{background:#0e4429}.hc[data-l="2"]{background:#006d32}.hc[data-l="3"]{background:#26a641}.hc[data-l="4"]{background:#39d353}
+.sync{max-width:640px;width:100%;margin-top:22px}
+.kb{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px;height:262px}
+.kc{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.kc h4{margin:0;font:600 13px var(--m);color:var(--mut)}
+.kcard{position:absolute;width:calc((100% - 24px)/3 - 20px);padding:8px 10px;background:#21262d;border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:6px;font-size:13.5px;line-height:1.3;transition:left .8s cubic-bezier(.3,1.5,.5,1),top .55s cubic-bezier(.3,1.4,.5,1),border-color .3s}
+.kcard.done{border-left-color:var(--ok)}.kcard.done:after{content:" ✔";color:var(--ok)}
+.bw{max-width:440px;margin-top:20px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel)}
+.bb{display:flex;align-items:center;gap:6px;padding:8px 12px;background:#21262d;font:12px var(--m);color:var(--mut)}.bb i{width:10px;height:10px;border-radius:50%;background:#484f58}
+.bb span{margin-left:10px;background:var(--bg);padding:2px 12px;border-radius:99px;flex:1}
+.bc{padding:14px;min-height:170px;position:relative}
+.bc:before{content:"404 · todavía no hay web";position:absolute;inset:0;display:grid;place-items:center;font:600 14px var(--m);color:var(--mut);transition:opacity .3s}.bw.live .bc:before{opacity:0}
+.sk{height:12px;border-radius:6px;background:#30363d;margin-bottom:10px;opacity:0;transform:scale(.85);transition:opacity .3s,transform .3s}
+.sk.hero{height:56px;background:linear-gradient(90deg,var(--blue),#79b8e8)}.sk.s{width:60%}
+.sk3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.sk3 .sk{height:44px;background:#21262d;border:1px solid var(--line);margin:0}
+.bw.live .sk{opacity:1;transform:none;transition:opacity .4s,transform .5s cubic-bezier(.2,2,.4,1);transition-delay:calc(var(--i)*.14s)}
+.sec{display:flex;gap:30px;align-items:center;flex-wrap:wrap;margin-top:26px}
+.shield{width:92px;animation:glw 2s ease-in-out infinite}
+@keyframes glw{0%,100%{filter:drop-shadow(0 0 3px rgba(63,185,80,.4))}50%{filter:drop-shadow(0 0 22px rgba(63,185,80,.95))}}
+.tick{stroke-dasharray:1;stroke-dashoffset:1}#s9.in .tick{animation:draw .9s ease .7s forwards}@keyframes draw{to{stroke-dashoffset:0}}
+.tf .dg{font:700 34px var(--m);letter-spacing:2px}.tf .bar{width:170px;margin-top:6px}
+.alert{background:var(--panel);border:1px solid var(--line);border-left:3px solid #d29922;border-radius:8px;padding:10px 14px;font-size:14px;max-width:300px;transform:translateX(130%)}
+#s9.in .alert{animation:toast 6s ease-in-out infinite}
+@keyframes toast{0%,8%{transform:translateX(130%);opacity:0}16%,78%{transform:none;opacity:1}88%,100%{transform:translateX(130%);opacity:0}}
+.live{align-self:flex-start;font:700 12px var(--m);color:#fff;background:var(--red);border-radius:5px;padding:2px 10px;margin-bottom:14px;animation:blink 1.2s infinite}
+@keyframes blink{50%{opacity:.45}}
+@media(max-width:700px){#heat{opacity:.25!important}.kcard{font-size:12px}}
+@media(prefers-reduced-motion:reduce){#glow{display:none}.tick{stroke-dashoffset:0;animation:none!important}.alert{animation:none!important;transform:none}.live{animation:none}}
+
+/* ---- v4: sin confeti salvo el final ---- */
+.rg{position:fixed;width:20px;height:20px;margin:-10px;border:3px solid;border-radius:50%;pointer-events:none;z-index:40;animation:rg .75s ease-out forwards}
+@keyframes rg{to{transform:scale(var(--s,9));opacity:0;border-width:1px}}
+@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+.duo{display:grid;grid-template-columns:1fr 1.15fr;gap:22px;align-items:start;margin-top:20px}.duo .steps{margin:0}
+.steps li.act{border-color:var(--blue);background:#1b2a3a}.steps li.dn:before{content:"✔";background:var(--ok)}
+.term2{background:#010409;border:1px solid var(--line);border-radius:8px;padding:14px 16px;font:13.5px/1.6 var(--m);min-height:310px;color:var(--mut);white-space:pre-wrap;overflow:hidden;word-break:break-all}
+.term2 .cmd{color:var(--tx)}.term2 .cmd:before{content:"$ ";color:var(--ok)}.term2 .okl,.logs .okl{color:var(--ok)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:18px}.card h3{margin-bottom:10px}
+.pr.merged{border-color:#8957e5;box-shadow:0 0 34px rgba(137,87,229,.35)}
+.prh{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:4px}
+.pill{font:700 12px var(--m);border-radius:99px;padding:2px 11px;color:#fff;background:#238636;transition:background .3s;white-space:nowrap}.pill.merged{background:#8957e5}
+.diff{margin:12px 0;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.d{font:13px var(--m);padding:3px 10px}.d.add{background:rgba(63,185,80,.15);color:#7ee787}.d.del{background:rgba(248,81,73,.15);color:#ffa198}
+.rev{font-size:14px;background:#21262d;border-radius:8px;padding:8px 12px}
+.pipe.g{gap:10px;margin:12px 0 0}
+.mrow{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:14px}.mrow .btn,.row .btn{margin:0}
+.btn:disabled{background:#21262d;color:var(--mut);cursor:not-allowed}
+.logs{background:#010409;border:1px solid var(--line);border-radius:8px;padding:10px 14px;font:13px/1.6 var(--m);color:var(--mut);height:124px;overflow:hidden;margin-top:14px;max-width:560px}
+.row{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:16px}
+.prod{font:600 14px var(--m);color:var(--mut)}.prod.on{color:var(--ok);animation:pop .5s}
+.tabk.hit{background:var(--ok);color:#0d1117;border-color:var(--ok)}
+.flow{max-width:700px;width:100%;margin-top:22px}.flow .fp{fill:none;stroke-width:3;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1}
+.flow .fn,.flow .mr{transform-box:fill-box;transform-origin:center;opacity:0}.flow .fn{fill:#0d1117;stroke-width:3}
+.flow .ft{opacity:0;font:13px var(--m);fill:#8b949e}.flow .ff,.flow .pk{opacity:0}
+.hr{display:flex;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:14.5px;line-height:1.35}
+.ic{width:18px;display:inline-block;flex:none}.hr .ic:before{content:"○";color:var(--mut)}.hr.on .ic:before{content:"✔";color:var(--ok)}.hr.on .ic{animation:pop .5s}
+.cm{display:flex;gap:10px;padding:10px 0;border-top:1px solid var(--line);font:14px var(--m)}.cm .hash{color:var(--mut)}
+.cm.bad .ic:before{content:"✗";color:var(--red)}.cm.good .ic:before{content:"✔";color:var(--ok)}.cm.bad .tx{color:var(--red)}
+@media(max-width:900px){.duo{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.flow .fp{stroke-dashoffset:0}.flow .fn,.flow .ft{opacity:1}}
+</style>
+</head>
+<body>
+<div id="pb"><div class="ball" id="pball"></div></div>
+<canvas id="cf"></canvas>
+<div id="glow"></div>
+<div class="top">orion-studios / <b>github-presentacion</b></div>
+<aside aria-label="Índice">
+  <h2>orion-studios / índice</h2>
+  <nav id="nav"></nav>
+</aside>
+<main>
+
+<section id="s1" class="canva">
+  <div id="heat" aria-hidden="true"></div>
+  <div id="ballh" class="ball"></div>
+  <h1 id="h1" class="glitch" data-t="Índice restaurado">Índice</h1>
+  <ul class="idx" id="idx"></ul>
+  <div class="term" id="term"></div>
+  <p class="mut" id="sub">Lo que veíais era una presentación normal. Esto es GitHub Pages: una web publicada gratis desde un repositorio. Y sí, sigue siendo la presentación.</p>
+  <button class="btn ghost" id="replay">↻ Repetir intro</button>
+</section>
+
+<section id="s2">
+  <div class="num">2 / 14</div><h2 class="t">¿Qué es GitHub?</h2>
+  <p>Git y GitHub se confunden, pero no son lo mismo.</p>
+  <div class="grid">
+    <div class="box o"><h3>Git</h3><p class="mut">Programa que se instala en tu ordenador. Guarda el historial de cada cambio de tus archivos. Funciona sin internet.</p></div>
+    <div class="box b"><h3>GitHub</h3><p class="mut">Servicio web que aloja repositorios Git y añade herramientas para colaborar: revisiones, incidencias, automatización y publicación.</p></div>
+  </div>
+  <svg class="sync" viewBox="0 0 640 150" role="img" aria-label="Git en tu ordenador sincroniza con GitHub">
+    <rect x="10" y="35" width="150" height="80" rx="10" fill="#161b22" stroke="#e8703a" stroke-width="2"/>
+    <text x="85" y="80" text-anchor="middle" fill="#e6edf3" font-family="monospace" font-size="15">Tu PC</text><text x="85" y="100" text-anchor="middle" fill="#8b949e" font-family="monospace" font-size="13">Git</text>
+    <rect x="480" y="35" width="150" height="80" rx="40" fill="#161b22" stroke="#428bbd" stroke-width="2"/>
+    <text x="555" y="86" text-anchor="middle" fill="#e6edf3" font-family="monospace" font-size="15">GitHub</text>
+    <path d="M170 58H470M470 94H170" stroke="#30363d" stroke-width="2" stroke-dasharray="4 6" fill="none"/>
+    <text x="320" y="48" text-anchor="middle" fill="#e8703a" font-family="monospace" font-size="13">push</text><text x="320" y="118" text-anchor="middle" fill="#79b8e8" font-family="monospace" font-size="13">pull</text>
+    <g fill="#e8703a"><circle r="6"><animateMotion dur="2.4s" repeatCount="indefinite" path="M170 58H470"/></circle><circle r="6"><animateMotion dur="2.4s" begin="1.2s" repeatCount="indefinite" path="M170 58H470"/></circle></g>
+    <g fill="#79b8e8"><circle r="6"><animateMotion dur="2.4s" begin=".6s" repeatCount="indefinite" path="M470 94H170"/></circle><circle r="6"><animateMotion dur="2.4s" begin="1.8s" repeatCount="indefinite" path="M470 94H170"/></circle></g>
+  </svg>
+  <ul class="ck"><li>Guardar versiones y volver atrás si algo se rompe</li><li>Trabajar varias personas en el mismo proyecto</li><li>Mostrar tu trabajo como portfolio público</li></ul>
+</section>
+
+<section id="s3">
+  <div class="num">3 / 14</div><h2 class="t">Conceptos básicos</h2>
+  <div class="grid">
+    <div class="box b"><h3>Repositorio</h3><p class="mut">La carpeta del proyecto con todo su historial.</p></div>
+    <div class="box b"><h3>Commit</h3><p class="mut">Una foto del proyecto en un momento, con un mensaje que la explica.</p></div>
+    <div class="box b"><h3>Branch</h3><p class="mut">Una rama paralela para probar cambios sin tocar la principal.</p></div>
+    <div class="box b"><h3>Merge</h3><p class="mut">Unir los cambios de una rama en otra.</p></div>
+  </div>
+  <svg class="flow" id="flowsvg" viewBox="0 0 700 210" role="img" aria-label="Tres archivos se convierten en commits en una rama y se unen a main con un merge">
+    <path class="fp" d="M30 50H170" stroke="#428bbd"/><path class="fp" d="M170 50C205 50 195 150 235 150" stroke="#e8703a"/><path class="fp" d="M235 150H470" stroke="#e8703a"/><path class="fp" d="M470 150C510 150 500 50 540 50" stroke="#3fb950"/><path class="fp" d="M170 50H670" stroke="#428bbd"/>
+    <circle class="fn" cx="30" cy="50" r="9" stroke="#428bbd"/><circle class="fn" cx="100" cy="50" r="9" stroke="#428bbd"/><circle class="fn" cx="170" cy="50" r="9" stroke="#428bbd"/>
+    <circle class="fn" cx="290" cy="150" r="9" stroke="#e8703a"/><circle class="fn" cx="370" cy="150" r="9" stroke="#e8703a"/><circle class="fn" cx="450" cy="150" r="9" stroke="#e8703a"/>
+    <circle class="fn" cx="540" cy="50" r="12" stroke="#3fb950"/><circle class="fn" cx="620" cy="50" r="9" stroke="#428bbd"/>
+    <text class="ft" x="30" y="28">main</text><text class="ft" x="240" y="128">rama: nueva-funcion</text>
+    <text class="ft" x="290" y="182" text-anchor="middle">add menu</text><text class="ft" x="370" y="182" text-anchor="middle">add footer</text><text class="ft" x="450" y="182" text-anchor="middle">fix bug</text>
+    <text class="ft" x="540" y="26" text-anchor="middle">merge</text><text class="ft" x="78" y="204" text-anchor="middle">tus archivos</text>
+    <g class="ff"><rect x="-9" y="-11" width="18" height="22" rx="3" fill="#79b8e8"/><path d="M-5-3H5M-5 2H5M-5 7H1" stroke="#0d1117" stroke-width="2"/></g>
+    <g class="ff"><rect x="-9" y="-11" width="18" height="22" rx="3" fill="#79b8e8"/><path d="M-5-3H5M-5 2H5M-5 7H1" stroke="#0d1117" stroke-width="2"/></g>
+    <g class="ff"><rect x="-9" y="-11" width="18" height="22" rx="3" fill="#79b8e8"/><path d="M-5-3H5M-5 2H5M-5 7H1" stroke="#0d1117" stroke-width="2"/></g>
+    <circle class="pk" r="7" fill="#e8703a"/><circle class="mr" cx="540" cy="50" r="12" fill="none" stroke="#3fb950" stroke-width="3"/>
+  </svg>
+</section>
+
+<section id="s4">
+  <div class="num">4 / 14</div><h2 class="t">Primeros pasos</h2>
+  <div class="duo">
+    <ol class="steps" id="st4"><li>Crea tu cuenta en <b>github.com</b></li><li>Crea un repositorio con <b>New</b> (con README)</li><li>Clónalo a tu ordenador</li><li>Cambia, haz commit, <b>push</b> y <b>pull</b></li></ol>
+    <div class="term2" id="t4"></div>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="num">5 / 14</div><h2 class="t">Flujo de trabajo colaborativo</h2>
+  <div class="duo">
+    <ol class="steps"><li><b>Fork</b>: copia el repositorio de otra persona a tu cuenta</li><li><b>Branch</b>: crea una rama y haz tus cambios</li><li><b>Pull Request</b>: propón que tus cambios se unan al proyecto</li><li><b>Code review</b>: el equipo comenta, pide ajustes y aprueba</li><li><b>Merge</b>: los cambios entran en la rama principal</li></ol>
+    <div class="card pr" id="prcard">
+      <div class="prh"><b>Añade la portada #13</b><span class="pill" id="prst">Open</span></div>
+      <div class="mut" style="font-size:14px">maria quiere unir <code>portada</code> en <code>main</code></div>
+      <div class="diff"><div class="d del ln" style="--i:0">- &lt;h1&gt;Título&lt;/h1&gt;</div><div class="d add ln" style="--i:1">+ &lt;h1&gt;Orion Studios&lt;/h1&gt;</div><div class="d add ln" style="--i:2">+ &lt;img src="logo.png"&gt;</div></div>
+      <div class="rev ln" style="--i:4">💬 <b>juan</b>: Se ve genial, aprobado ✔</div>
+      <div class="pipe g" id="prc"><span>Tests</span><span>Revisión</span></div>
+      <div class="mrow"><button class="btn" id="merge" disabled>Esperando checks…</button><span class="pill" id="iss">Issue #12 abierto</span></div>
+    </div>
+  </div>
+  <p class="mut" style="margin-top:16px">Los <b>issues</b> son las tareas e ideas del proyecto. Si la PR incluye «Closes #12», el issue se cierra solo al hacer merge.</p>
+</section>
+
+<section id="s6">
+  <div class="num">6 / 14</div><h2 class="t">Gestión de proyectos</h2>
+  <div class="grid">
+    <div class="box b"><h3>Projects</h3><p class="mut">Tablero tipo kanban conectado a los issues.</p></div>
+    <div class="box b"><h3>Milestones</h3><p class="mut">Agrupan issues hacia una fecha o versión.</p></div>
+    <div class="box b"><h3>Labels</h3><p class="mut" style="margin-bottom:8px">Clasifican issues y PRs.</p><span class="tag" style="color:#f85149">bug</span><span class="tag" style="color:#3fb950">mejora</span><span class="tag" style="color:#d29922">ayuda</span></div>
+    <div class="box b"><h3>Wiki</h3><p class="mut">Documentación del proyecto, aparte del código.</p></div>
+  </div>
+  <div class="kb" id="kb"><div class="kc"><h4>Por hacer</h4></div><div class="kc"><h4>En curso</h4></div><div class="kc"><h4>Hecho</h4></div></div>
+</section>
+
+<section id="s7">
+  <div class="num">7 / 14</div><h2 class="t">GitHub Actions</h2>
+  <p>Automatiza tareas cada vez que ocurre algo en el repositorio: probar el código (CI) y desplegarlo (CD).</p>
+<pre><span class="c"># .github/workflows/test.yml</span>
+<span class="k">name</span>: Tests
+<span class="k">on</span>: [push, pull_request]
+<span class="k">jobs</span>:
+  <span class="k">test</span>:
+    <span class="k">runs-on</span>: ubuntu-latest
+    <span class="k">steps</span>:
+      - <span class="k">uses</span>: actions/checkout@v4
+      - <span class="k">run</span>: npm ci &amp;&amp; npm test</pre>
+  <div class="pipe" id="pipe"><span>git push</span><b></b><span>Tests</span><b></b><span>Deploy</span></div>
+  <div class="logs" id="logs"></div>
+  <div class="row"><button class="btn" id="rerun">▶ Ejecutar workflow</button><span class="prod" id="prod">⚪ Sin desplegar</span></div>
+  <p class="mut" style="margin-top:14px">Cada push lanza los tests. Si fallan, lo ves en la PR antes de unir nada.</p>
+</section>
+
+<section id="s8">
+  <div class="num">8 / 14</div><h2 class="t">GitHub Pages</h2>
+  <p>Estás dentro de un ejemplo: esta presentación es una web estática alojada gratis en GitHub.</p>
+  <ol class="steps"><li>Sube tu <code>index.html</code> al repositorio</li><li>Ve a <b>Settings → Pages</b></li><li>Elige la rama <code>main</code> y la carpeta raíz</li><li>Tu web queda en <code>usuario.github.io/repositorio</code></li></ol>
+  <button class="btn" id="deploy">🚀 Publicar web</button>
+  <div class="bar"><i id="dbar"></i></div><p class="mut" id="dres" style="margin-top:10px">&nbsp;</p>
+  <div class="bw" id="bw"><div class="bb"><i></i><i></i><i></i><span>usuario.github.io/repositorio</span></div><div class="bc"><div class="sk hero" style="--i:0"></div><div class="sk" style="--i:1"></div><div class="sk s" style="--i:2"></div><div class="sk3"><div class="sk" style="--i:3"></div><div class="sk" style="--i:4"></div><div class="sk" style="--i:5"></div></div></div></div>
+</section>
+
+<section id="s9">
+  <div class="num">9 / 14</div><h2 class="t">Seguridad</h2>
+  <div class="grid">
+    <div class="box b"><h3>Dependabot</h3><p class="mut">Avisa de librerías vulnerables y abre PRs para actualizarlas.</p></div>
+    <div class="box b"><h3>Secretos</h3><p class="mut">Las claves van en <i>Secrets</i>, nunca dentro del código. GitHub detecta las que se cuelan.</p></div>
+    <div class="box b"><h3>Permisos</h3><p class="mut">Roles de lectura, escritura y admin. Ramas protegidas que exigen revisión.</p></div>
+    <div class="box b"><h3>2FA</h3><p class="mut">Segundo factor en tu cuenta. Es obligatorio para quien contribuye código.</p></div>
+  </div>
+  <div class="sec"><svg class="shield" viewBox="0 0 100 120" aria-hidden="true"><path d="M50 6L92 22V58C92 88 70 108 50 116C30 108 8 88 8 58V22Z" fill="#12251a" stroke="#3fb950" stroke-width="4"/><path class="tick" d="M30 60l14 14 28-30" fill="none" stroke="#3fb950" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="tf"><div class="mut" style="font-size:14px">Código 2FA</div><div class="dg" id="dg">··· ···</div><div class="bar"><i id="tfb"></i></div></div><div class="alert">⚠ <b>Dependabot</b>: lodash 4.17.15 tiene una vulnerabilidad. He abierto la PR #42.</div></div>
+</section>
+
+<section id="s10">
+  <div class="num">10 / 14</div><h2 class="t">Copilot y extras</h2>
+  <div class="grid">
+    <div class="box o"><h3>GitHub Copilot</h3><p class="mut">Asistente de IA que sugiere código y responde dudas dentro del editor.</p></div>
+    <div class="box o"><h3>Codespaces</h3><p class="mut">Un entorno de desarrollo completo en el navegador, sin instalar nada.</p></div>
+    <div class="box o"><h3>Discussions</h3><p class="mut">Foro del repositorio para preguntas y ideas que no son issues.</p></div>
+  </div>
+  <pre class="cop" id="cop" tabindex="0" aria-label="Editor de ejemplo: pulsa Tab para aceptar la sugerencia"><span class="tabk" id="tabk">Tab ⇥</span><span id="hd"></span><span class="gh" id="gh"></span></pre>
+  <p class="mut" style="margin-top:12px;font-size:15px">Cuando aparezca la sugerencia en gris, pulsa <b>Tab</b> para aceptarla.</p>
+</section>
+
+<section id="s11">
+  <div class="num">11 / 14</div><h2 class="t">Buenas prácticas</h2>
+  <div class="duo">
+    <div class="card"><h3>Salud del repositorio</h3>
+      <div style="display:flex;gap:16px;align-items:center;margin:6px 0 12px"><svg viewBox="0 0 80 80" width="84" height="84" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="none" stroke="#30363d" stroke-width="7"/><circle id="hring" cx="40" cy="40" r="34" fill="none" stroke="#3fb950" stroke-width="7" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="213.6" transform="rotate(-90 40 40)" style="transition:stroke-dashoffset .7s"/><text id="hpc" x="40" y="46" text-anchor="middle" fill="#e6edf3" font-family="monospace" font-size="16" font-weight="700">0%</text></svg><span class="mut" style="font-size:14.5px">Un proyecto cuidado se entiende sin preguntar.</span></div>
+      <div class="hr"><span class="ic"></span><div><b>README.md</b><br><span class="mut">Qué es el proyecto y cómo usarlo</span></div></div>
+      <div class="hr"><span class="ic"></span><div><b>.gitignore</b><br><span class="mut">Archivos que Git debe ignorar (claves, node_modules…)</span></div></div>
+      <div class="hr"><span class="ic"></span><div><b>LICENSE</b><br><span class="mut">Qué pueden hacer otros con tu código (MIT, GPL…)</span></div></div>
+      <div class="hr"><span class="ic"></span><div><b>Commits claros</b><br><span class="mut">Cada mensaje dice qué cambió y por qué</span></div></div>
+    </div>
+    <div class="card"><h3>Historial de commits</h3>
+      <div class="cm bad"><span class="ic"></span><span class="hash">a1b2c3d</span><span class="tx">cambios</span></div>
+      <div class="cm bad"><span class="ic"></span><span class="hash">7e4f9a0</span><span class="tx">asdf</span></div>
+      <div class="cm bad"><span class="ic"></span><span class="hash">c83d1b2</span><span class="tx">arreglado</span></div>
+      <div class="cm bad"><span class="ic"></span><span class="hash">5b0e6f4</span><span class="tx">final final v2</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="s12">
+  <div class="num">12 / 14</div><h2 class="t">Demo en vivo</h2>
+  <div class="live">● EN VIVO</div>
+  <p>Vamos a verlo funcionando con nuestro propio proyecto.</p>
+  <div class="box b"><h3>Repositorio de la demo</h3><p class="mut" style="margin:0">Sustituye este enlace por el vuestro: <a href="https://github.com/">github.com/vuestro-usuario/vuestro-proyecto</a></p></div>
+  <ol class="steps"><li>Mostrar el repositorio y su historial de commits</li><li>Crear una rama y cambiar algo</li><li>Abrir una Pull Request</li><li>Ver la Action ejecutarse y hacer merge</li></ol>
+</section>
+
+<section id="s13">
+  <div class="num">13 / 14</div><h2 class="t">Conclusiones</h2>
+  <ul class="ck"><li>Git guarda el historial; GitHub lo hace colaborativo</li><li>Ramas y Pull Requests permiten trabajar en equipo sin pisarse</li><li>Actions, Pages y Dependabot automatizan lo repetitivo</li><li>Un buen README y commits claros hacen el proyecto entendible</li></ul>
+</section>
+
+<section id="s14">
+  <div class="num">14 / 14</div><h2 class="t">Preguntas y recursos</h2>
+  <div class="grid">
+    <div class="box b"><h3>Documentación oficial</h3><a href="https://docs.github.com/es">docs.github.com/es</a></div>
+    <div class="box b"><h3>GitHub Skills</h3><a href="https://skills.github.com/">skills.github.com</a></div>
+    <div class="box b"><h3>Libro Pro Git</h3><a href="https://git-scm.com/book/es/v2">git-scm.com/book/es</a></div>
+    <div class="box b"><h3>Elegir licencia</h3><a href="https://choosealicense.com/">choosealicense.com</a></div>
+  </div>
+  <p class="mut" style="margin-top:28px">Gracias. Una presentación de Orion Studios.</p>
+  <div id="fin" class="ball" title="¡Pulsa!"></div>
+</section>
+
+</main>
+<script>
+const $=s=>document.querySelector(s),sleep=ms=>new Promise(r=>setTimeout(r,ms)),RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const CH='█▓▒░#%&@/\\|<>';
+const items=["Portada","¿Qué es GitHub?","Conceptos básicos","Primeros pasos","Flujo colaborativo","Gestión de proyectos","GitHub Actions","GitHub Pages","Seguridad","Copilot y extras","Buenas prácticas","Demo en vivo","Conclusiones","Preguntas y recursos"];
+const OLD=["Introducción","Servicios","Equipo médico","Instalaciones","Atención al cliente","Testimonios","Contacto"];
+const LINES=[['cmd','git merge balon-de-baloncesto'],['out','CONFLICT: indice.canva no se puede fusionar'],['cmd','git checkout -b github-pages'],['out','Rama nueva. Aquí sí empieza la presentación.']];
+const nav=$('#nav'),idx=$('#idx');
+items.forEach((t,i)=>{const id='s'+(i+1);
+nav.insertAdjacentHTML('beforeend',`<a href="#${id}" data-id="${id}"><i>${String(i+1).padStart(2,'0')}</i>${t}</a>`);
+idx.insertAdjacentHTML('beforeend',`<li><a href="#${id}"></a></li>`)});
+const L=[...idx.children],A=[...idx.querySelectorAll('a')],full=i=>`${i+1}. ${items[i]}`;
+
+/* texto que se "corrompe" y se corrige */
+function morph(el,to,dur=800){return new Promise(r=>{const from=el.textContent,n=Math.max(from.length,to.length),t0=performance.now();
+(function f(now){const p=Math.min((now-t0)/dur,1),k=p*n;let s='';
+for(let j=0;j<n;j++)s+=j<k?(to[j]||''):(Math.random()<.5?CH[Math.random()*CH.length|0]:(from[j]||''));
+el.textContent=s;p<1?requestAnimationFrame(f):(el.textContent=to,r())})(t0)})}
+function decode(el){if(!el||RM)return;const t=el.textContent;el.textContent=[...t].map(c=>c===' '?c:CH[Math.random()*CH.length|0]).join('');morph(el,t,650)}
+
+/* confeti */
+const cv=$('#cf'),cx=cv.getContext('2d');let P=[],run=0;
+const fit=()=>{cv.width=innerWidth;cv.height=innerHeight};fit();addEventListener('resize',fit);
+function boom(x,y,n=110){if(RM)return;const C=['#428bbd','#79b8e8','#e8703a','#3fb950','#ffffff','#8957e5'];
+for(let i=0;i<n;i++){const a=Math.random()*6.28,v=4+Math.random()*9;P.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-6,r:3+Math.random()*4,c:C[i%6],l:80+Math.random()*50,t:Math.random()*6})}
+if(!run){run=1;requestAnimationFrame(tick)}}
+function tick(){cx.clearRect(0,0,cv.width,cv.height);P=P.filter(p=>p.l-->0);
+P.forEach(p=>{p.vy+=.35;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.t+=.2;cx.save();cx.translate(p.x,p.y);cx.rotate(p.t);cx.fillStyle=p.c;cx.globalAlpha=Math.min(1,p.l/30);cx.fillRect(-p.r,-p.r/2,p.r*2,p.r);cx.restore()});
+P.length?requestAnimationFrame(tick):(run=0)}
+addEventListener('click',e=>{if(e.target.closest('.box'))ring(e.clientX,e.clientY,'#79b8e8',5);if(e.target.id==='fin')boom(e.clientX,e.clientY,80)});
+
+/* intro: el índice de Canva se rompe y se corrige */
+async function typeLines(el,lines){el.innerHTML='';for(const[c,t]of lines){const d=document.createElement('div');d.className=c;el.append(d);const cu=document.createElement('span');cu.className='cur';cu.textContent='▌';d.append(cu);for(const ch of t){cu.before(ch);await sleep(c==='cmd'?30:9)}cu.remove()}}
+function setCanva(){$('#s1').classList.add('canva');const h=$('#h1');h.textContent='Índice';h.classList.remove('go');
+A.forEach((a,i)=>{a.textContent=OLD[i]||'';a.classList.remove('done');L[i].classList.toggle('hide',i>=OLD.length)});
+$('#term').innerHTML='';$('#sub').classList.remove('on');$('#ballh').classList.remove('fall')}
+function setFinal(){$('#s1').classList.remove('canva');$('#h1').textContent='Índice restaurado';
+A.forEach((a,i)=>{a.textContent=full(i);L[i].classList.remove('hide')});A[0].classList.add('done');
+$('#term').innerHTML=LINES.map(([c,t])=>`<div class="${c}">${t}</div>`).join('');$('#sub').classList.add('on')}
+let busy=0;
+async function intro(){if(busy)return;busy=1;setCanva();
+await sleep(1700);const b=$('#ballh');void b.offsetWidth;b.classList.add('fall');
+await sleep(850);
+$('#s1').classList.remove('canva');document.body.classList.add('shake');setTimeout(()=>document.body.classList.remove('shake'),600);
+const r=b.getBoundingClientRect(),bx=r.left+r.width/2,by=r.top+r.height;ring(bx,by,'#fff',30);setTimeout(()=>ring(bx,by,'#e8703a',30),140);setTimeout(()=>ring(bx,by,'#79b8e8',30),280);
+H.forEach((d,i)=>setTimeout(()=>{d.dataset.l=4;setTimeout(()=>lv(d),900)},(i/7|0)*28));const h=$('#h1');h.classList.add('go');morph(h,'Índice restaurado',900);
+A.forEach((a,i)=>setTimeout(()=>{L[i].classList.remove('hide');morph(a,full(i),700).then(()=>{if(!i)a.classList.add('done')})},200+i*100));
+await sleep(2500);await typeLines($('#term'),LINES);$('#sub').classList.add('on');busy=0}
+$('#replay').onclick=()=>RM?setFinal():intro();
+RM?setFinal():(setCanva(),intro());
+
+/* revelado por secciones */
+const SEL='.num,h2.t,section>p,.box,.steps li,.tree div,.pipe,.btn,.cop,.kb,.bw,.sec,.sync,.term2,.card,.logs';
+document.querySelectorAll('section:not(#s1)').forEach(s=>{
+s.querySelectorAll(SEL).forEach((e,i)=>{e.classList.add('rv');e.style.setProperty('--i',i)});
+s.querySelectorAll('.ck li').forEach((e,i)=>e.style.setProperty('--i',i));
+s.querySelectorAll('pre:not(#cop)').forEach(p=>{p.innerHTML=p.innerHTML.split('\n').map((l,i)=>`<span class="ln" style="--i:${i}">${l||' '}</span>`).join('')});
+s.querySelectorAll('#s3 svg path,.tick').forEach(p=>p.setAttribute('pathLength',1));
+s.querySelectorAll('#s3 svg circle').forEach((c,i)=>c.style.setProperty('--c',i));s.dataset.n=s.id.slice(1).padStart(2,'0')});
+
+
+
+function ring(x,y,c='#79b8e8',s=9){if(RM)return;const d=document.createElement('div');d.className='rg';d.style.cssText=`left:${x}px;top:${y}px;border-color:${c};--s:${s}`;document.body.append(d);d.addEventListener('animationend',()=>d.remove())}
+const bez=(a,b,c,d,t)=>{const u=1-t;return[u*u*u*a[0]+3*u*u*t*b[0]+3*u*t*t*c[0]+t*t*t*d[0],u*u*u*a[1]+3*u*u*t*b[1]+3*u*t*t*c[1]+t*t*t*d[1]]};
+const tw=(d,fn)=>new Promise(r=>{const t0=performance.now();(function f(n){const p=Math.min((n-t0)/d,1);fn(p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2);p<1?requestAnimationFrame(f):r()})(t0)});
+function mk(p,cls,txt){const d=document.createElement('div');d.className=cls;d.textContent=txt||'';p.append(d);return d}
+
+/* 3: archivos que se convierten en commits y se fusionan */
+async function flow(){if(flow.on||RM)return;flow.on=1;
+const svg=$('#flowsvg'),P=[...svg.querySelectorAll('.fp')],N=[...svg.querySelectorAll('.fn')],T=[...svg.querySelectorAll('.ft')],F=[...svg.querySelectorAll('.ff')],pk=svg.querySelector('.pk'),mr=svg.querySelector('.mr');
+const draw=(p,d)=>p.animate([{strokeDashoffset:1},{strokeDashoffset:0}],{duration:d,fill:'forwards',easing:'ease-in-out'}).finished;
+const pop=e=>e.animate([{transform:'scale(0)',opacity:0},{transform:'scale(1)',opacity:1}],{duration:380,fill:'forwards',easing:'cubic-bezier(.2,2,.4,1)'}).finished;
+const fade=(e,d=400)=>e.animate([{opacity:0},{opacity:1}],{duration:d,fill:'forwards'}).finished;
+const HM=[[50,165],[78,176],[106,165]];
+while(1){svg.getAnimations({subtree:true}).forEach(a=>a.cancel());
+F.forEach((g,i)=>g.setAttribute('transform',`translate(${HM[i][0]},${HM[i][1]})`));
+await draw(P[0],700);await Promise.all(N.slice(0,3).map((n,i)=>sleep(i*130).then(()=>pop(n))));fade(T[0]);
+await sleep(300);await draw(P[1],600);await draw(P[2],700);fade(T[1]);F.forEach(g=>fade(g));fade(T[6]);await sleep(700);
+for(let i=0;i<3;i++){const a=HM[i],d=[290+i*80,150];
+await tw(750,t=>{const[x,y]=bez(a,[a[0]+40,200],[d[0]-60,195],d,t);F[i].setAttribute('transform',`translate(${x},${y}) scale(${1-.45*t})`)});
+F[i].animate([{opacity:1},{opacity:0}],{duration:150,fill:'forwards'});pop(N[3+i]);fade(T[2+i]);await sleep(450)}
+await sleep(300);pk.setAttribute('cx',450);pk.setAttribute('cy',150);pk.animate([{opacity:0},{opacity:1}],{duration:150,fill:'forwards'});
+await Promise.all([draw(P[3],850),tw(850,t=>{const[x,y]=bez([450,150],[505,150],[495,50],[540,50],t);pk.setAttribute('cx',x);pk.setAttribute('cy',y)})]);
+pk.animate([{opacity:1},{opacity:0}],{duration:200,fill:'forwards'});pop(N[6]);fade(T[5]);
+mr.animate([{transform:'scale(1)',opacity:1},{transform:'scale(4.5)',opacity:0}],{duration:800,easing:'ease-out'});
+await Promise.all([draw(P[4],900),sleep(500).then(()=>pop(N[7]))]);
+await sleep(3200);await svg.animate([{opacity:1},{opacity:0}],{duration:600,fill:'forwards'}).finished}}
+
+/* 4: terminal que sigue los pasos */
+async function term4(){if(term4.on)return;term4.on=1;const t=$('#t4'),li=[...$('#st4').children];
+const typ=async(x,c)=>{const d=mk(t,c);for(const ch of x){d.textContent+=ch;await sleep(RM?0:26)}};
+const prog=async l=>{const d=mk(t,'');for(let p=0;p<=100;p+=5){d.textContent=`${l} [${'█'.repeat(p/5)}${'░'.repeat(20-p/5)}] ${p}%`;await sleep(RM?0:55)}};
+const go=i=>{li.forEach(x=>x.classList.remove('act'));li[i].classList.add('act')},ok=i=>{li[i].classList.remove('act');li[i].classList.add('dn')};
+while(1){t.innerHTML='';li.forEach(x=>x.classList.remove('act','dn'));
+go(0);await typ('# github.com → Sign up','c');await sleep(500);mk(t,'okl','✔ Cuenta creada: @orion-studios');await sleep(700);ok(0);
+go(1);await typ('# New repository → proyecto (con README)','c');await sleep(500);mk(t,'okl','✔ Repositorio creado');await sleep(700);ok(1);
+go(2);await typ('git clone https://github.com/usuario/proyecto.git','cmd');mk(t,'',"Cloning into 'proyecto'...");await prog('Receiving objects');mk(t,'okl','✔ Clonado');await sleep(700);ok(2);
+go(3);await typ('git add .','cmd');await typ('git commit -m "Añade la portada"','cmd');mk(t,'','[main 3f2a9c1] Añade la portada');await typ('git push','cmd');await prog('Writing objects');mk(t,'okl','✔ Subido a github.com');await typ('git pull','cmd');mk(t,'','Already up to date.');ok(3);
+await sleep(4500)}}
+
+/* 5: una pull request de verdad */
+async function prDemo(){if(prDemo.on)return;prDemo.on=1;const cs=[...$('#prc').children],b=$('#merge'),st=$('#prst'),is=$('#iss'),card=$('#prcard');
+await sleep(1500);for(const c of cs){c.className='run';await sleep(900);c.className='ok'}
+b.disabled=false;b.textContent='Merge pull request';
+b.onclick=async()=>{if(card.classList.contains('merged')){card.classList.remove('merged');st.className='pill';st.textContent='Open';is.className='pill';is.textContent='Issue #12 abierto';b.classList.remove('merged');b.textContent='Merge pull request';return}
+b.textContent='⏳ Fusionando…';await sleep(700);card.classList.add('merged');st.className='pill merged';st.textContent='Merged';is.className='pill merged';is.textContent='Issue #12 cerrado';b.classList.add('merged');b.textContent='✔ Merged · pulsa para repetir';
+const r=b.getBoundingClientRect();ring(r.left+r.width/2,r.top+r.height/2,'#8957e5',10)}}
+
+/* 7: pipeline con logs y producción */
+async function pipe(){if(pipe.on)return;pipe.on=1;const el=$('#pipe'),sp=[...el.querySelectorAll('span')],bs=[...el.querySelectorAll('b')],lg=$('#logs'),pd=$('#prod');
+sp.forEach(x=>x.className='');bs.forEach(x=>x.className='');lg.innerHTML='';pd.className='prod';pd.textContent='⚪ Sin desplegar';
+const log=(t,c='')=>{mk(lg,c,t);lg.scrollTop=1e5};
+const S=[['Run actions/checkout@v4','✔ Código descargado'],['npm ci · 214 paquetes instalados','Ejecutando tests…'],['Construyendo el sitio…','Subiendo a producción…']];
+for(let i=0;i<3;i++){sp[i].className='run';for(const x of S[i]){log(x);await sleep(450)}
+if(i===1){const d=mk(lg,'okl');for(let n=0;n<=12;n++){d.textContent=`✔ ${n}/12 tests pasados`;await sleep(70)}}
+await sleep(350);sp[i].className='ok';if(bs[i])bs[i].className='ok'}
+pipe.v=(pipe.v||0)+1;log('✔ Desplegado','okl');pd.textContent='🟢 En producción · v1.0.'+pipe.v;pd.className='prod on';
+const r=pd.getBoundingClientRect();ring(r.left+12,r.top+10,'#3fb950',8);pipe.on=0}
+
+/* 10: Copilot, Tab de verdad */
+const EX=[['function sumar(a, b) {\n  ','return a + b;\n}'],['// ¿es par el número?\nfunction esPar(n) {\n  ','return n % 2 === 0;\n}'],['const saludo = (nombre) =>',' `¡Hola, ${nombre}!`;']];
+let copSt='idle',copAcc=null;
+async function cop(){if(cop.on)return;cop.on=1;const hd=$('#hd'),g=$('#gh'),t=$('#tabk');let k=0;
+while(1){const[h,x]=EX[k++%EX.length];hd.textContent=h;g.className='gh';g.textContent='';t.className='tabk';
+for(const c of x){g.textContent+=c;await sleep(45)}
+t.classList.add('on');copSt='wait';await Promise.race([new Promise(r=>copAcc=r),sleep(6000)]);
+copSt='idle';copAcc=null;g.classList.add('ok');t.classList.add('hit');await sleep(1800)}}
+$('#cop').onclick=()=>copAcc&&copAcc();
+addEventListener('keydown',e=>{if(e.key!=='Tab'||copSt!=='wait')return;const r=$('#s10').getBoundingClientRect();
+if(r.top<innerHeight*.6&&r.bottom>innerHeight*.4){e.preventDefault();copAcc&&copAcc()}});
+
+/* 11: salud del repositorio y commits que se corrigen */
+async function health(){if(health.on)return;health.on=1;const rows=[...document.querySelectorAll('.hr')],rg=$('#hring'),pc=$('#hpc'),cm=[...document.querySelectorAll('.cm')];
+const GOOD=['Añade el formulario de contacto','Corrige el menú en móvil','Actualiza el README con instrucciones','Elimina la clave API del repositorio'];
+for(let i=0;i<rows.length;i++){await sleep(800);rows[i].classList.add('on');const p=(i+1)*25;rg.style.strokeDashoffset=213.6*(1-p/100);pc.textContent=p+'%'}
+await sleep(600);
+for(let i=0;i<cm.length;i++){await sleep(500);cm[i].classList.replace('bad','good');if(RM)cm[i].querySelector('.tx').textContent=GOOD[i];else morph(cm[i].querySelector('.tx'),GOOD[i],750)}}
+
+const FX={
+s3:()=>setTimeout(flow,500),s4:()=>setTimeout(term4,600),s5:()=>setTimeout(prDemo,700),s11:()=>setTimeout(health,700),
+s6:()=>setTimeout(kanban,700),s9:()=>setTimeout(tfa,900),s7:()=>setTimeout(pipe,900),s10:()=>setTimeout(cop,900),
+s13(){setTimeout(()=>{boom(innerWidth*.5,innerHeight*.5,150);setTimeout(()=>boom(innerWidth*.3,innerHeight*.6,90),350);setTimeout(()=>boom(innerWidth*.75,innerHeight*.55,90),650)},900)}};
+const rio=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const s=e.target;rio.unobserve(s);s.classList.add('in');
+decode(s.querySelector('.num'));decode(s.querySelector('h2.t'));
+setTimeout(()=>s.querySelectorAll('.rv').forEach(x=>x.classList.add('rdy')),2200);
+if(FX[s.id])FX[s.id](s)}),{threshold:.15});
+document.querySelectorAll('section:not(#s1)').forEach(s=>rio.observe(s));
+
+/* ---- visuales extra ---- */
+const heat=$('#heat'),H=[];for(let i=0;i<371;i++){const d=document.createElement('i');d.className='hc';heat.append(d);H.push(d)}
+const lv=d=>{d.dataset.l=Math.random()<.35?0:1+(Math.random()*4|0)};H.forEach(lv);
+if(!RM)setInterval(()=>{for(let k=0;k<7;k++)lv(H[Math.random()*H.length|0])},140);
+const secs=[...document.querySelectorAll('section[id]')];
+function par(){secs.forEach(s=>{const t=s.getBoundingClientRect().top;s.style.setProperty('--py',Math.round(-t*.22))})}par();
+if(!RM){const g=$('#glow');addEventListener('pointermove',e=>{g.style.transform=`translate(${e.clientX}px,${e.clientY}px)`});
+document.addEventListener('pointermove',e=>{const b=e.target.closest&&e.target.closest('.box.rdy');if(!b)return;const r=b.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;b.style.transform=`perspective(700px) rotateX(${-y*10}deg) rotateY(${x*12}deg) translateY(-4px)`});
+document.addEventListener('pointerout',e=>{const b=e.target.closest&&e.target.closest('.box');if(b&&!b.contains(e.relatedTarget))b.style.transform=''})}
+function kanban(){const kb=$('#kb');if(kb.dataset.on)return;kb.dataset.on=1;
+const cards=['#12 Diseñar portada','#13 Configurar Actions','#14 Escribir README','#15 Publicar en Pages'].map(t=>{const d=document.createElement('div');d.className='kcard';d.textContent=t;kb.append(d);return d}),col=[0,0,0,0];
+const place=()=>[0,1,2].forEach(c=>{let r=0;cards.forEach((d,i)=>{if(col[i]===c){d.style.left=`calc((100% - 24px)/3*${c} + 12px*${c} + 10px)`;d.style.top=`${46+r*56}px`;r++}})});
+place();const seq=[[0,1],[1,1],[0,2],[2,1],[1,2],[3,1],[2,2],[3,2]];let k=0;
+(async()=>{while(1){await sleep(1300);if(k===seq.length){await sleep(1800);col.fill(0);cards.forEach(d=>d.classList.remove('done'));k=0;place();continue}
+const[i,c]=seq[k++];col[i]=c;cards[i].classList.toggle('done',c===2);place();if(c===2){await sleep(600);const r=cards[i].getBoundingClientRect();ring(r.left+r.width/2,r.top+10,'#3fb950',6)}}})()}
+function tfa(){if(tfa.on)return;tfa.on=1;const dg=$('#dg'),b=$('#tfb');
+const go=()=>{morph(dg,String(Math.random()*1e6|0).padStart(6,'0').replace(/(\d{3})(\d{3})/,'$1 $2'),500);b.style.transition='none';b.style.width='100%';void b.offsetWidth;b.style.transition='width 2.8s linear';b.style.width='0'};go();setInterval(go,2900)}
+
+/* botones */
+$('#rerun').onclick=pipe;
+$('#deploy').onclick=async()=>{const bar=$('#dbar'),res=$('#dres');$('#bw').classList.remove('live');bar.style.transition='none';bar.style.width='0';res.textContent='Publicando…';void bar.offsetWidth;
+bar.style.transition='width 1.8s cubic-bezier(.3,.6,.5,1)';bar.style.width='100%';await sleep(1900);
+$('#bw').classList.add('live');res.innerHTML='✔ Tu web ya está online en <b>usuario.github.io/repositorio</b>';const r=res.getBoundingClientRect();ring(r.left+14,r.top+8,'#3fb950',14)};
+
+/* barra de progreso con balón rodando */
+const pb=$('#pb'),pball=$('#pball');
+addEventListener('scroll',()=>{const p=scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight);pb.style.width=p*100+'%';pball.style.transform=`rotate(${p*1800}deg)`;par()},{passive:true});
+
+/* índice lateral y teclado */
+const links=[...nav.children];
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(l=>l.classList.toggle('on',l.dataset.id===e.target.id))}),{threshold:.5});
+document.querySelectorAll('section').forEach(s=>io.observe(s));
+addEventListener('keydown',e=>{const s=[...document.querySelectorAll('section')];
+const c=s.findIndex(x=>x.getBoundingClientRect().bottom>innerHeight/2);
+if(e.key==='ArrowRight'||e.key==='PageDown'){e.preventDefault();s[Math.min(c+1,s.length-1)].scrollIntoView()}
+if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();s[Math.max(c-1,0)].scrollIntoView()}});
+</script>
+</body>
+</html>
