@@ -3,8 +3,7 @@
 window.FIREBASE_CONFIG = {
   apiKey: "AIzaSyCbCs2_DKDS-OqDYjAtZVMuBtSTXuWp0BU",
   authDomain: "github-pages0.firebaseapp.com",
+  databaseURL: "https://github-pages0-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "github-pages0",
-  storageBucket: "github-pages0.firebasestorage.app",
-  messagingSenderId: "978428847287",
   appId: "1:978428847287:web:68d832a304bd2aa6025932"
 };
