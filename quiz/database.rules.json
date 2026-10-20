@@ -1,0 +1,62 @@
+{
+  "rules": {
+    "rooms": {
+      "$pin": {
+        ".write": "auth != null && !data.exists() && newData.child('host').val() === auth.uid",
+
+        "host": {
+          ".read": "auth != null",
+          ".write": "auth != null && !data.exists() && newData.val() === auth.uid"
+        },
+        "state": {
+          ".read": "auth != null",
+          ".write": "auth != null && newData.parent().child('host').val() === auth.uid"
+        },
+        "q": {
+          ".read": "auth != null",
+          ".write": "auth != null && newData.parent().child('host').val() === auth.uid"
+        },
+        "t0": {
+          ".read": "auth != null",
+          ".write": "auth != null && newData.parent().child('host').val() === auth.uid"
+        },
+        "question": {
+          ".read": "auth != null",
+          ".write": "auth != null && newData.parent().child('host').val() === auth.uid"
+        },
+        "reveal": {
+          ".read": "auth != null",
+          ".write": "auth != null && newData.parent().child('host').val() === auth.uid"
+        },
+        "scores": {
+          ".read": "auth != null",
+          ".write": "auth != null && newData.parent().child('host').val() === auth.uid"
+        },
+
+        "players": {
+          ".read": "auth != null",
+          "$pid": {
+            ".write": "auth != null && ($pid === auth.uid || newData.parent().parent().child('host').val() === auth.uid)",
+            ".validate": "newData.hasChildren(['name'])",
+            "name": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 16" },
+            "$other": { ".validate": false }
+          }
+        },
+
+        "answers": {
+          ".read": "auth != null && data.parent().child('host').val() === auth.uid",
+          "$q": {
+            "$pid": {
+              ".read": "auth != null && $pid === auth.uid",
+              ".write": "auth != null && $pid === auth.uid && !data.exists()",
+              ".validate": "newData.hasChildren(['a', 't']) && newData.child('a').isNumber() && newData.child('a').val() >= 0 && newData.child('a').val() <= 3 && newData.child('t').val() === now",
+              "a": {},
+              "t": {},
+              "$other": { ".validate": false }
+            }
+          }
+        }
+      }
+    }
+  }
+}
