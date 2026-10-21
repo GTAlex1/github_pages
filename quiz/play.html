@@ -29,7 +29,12 @@ button.go{background:#238636;color:#fff;border:0;border-radius:12px;padding:15px
 @keyframes pop{from{transform:scale(.8);opacity:0}}
 .o0{background:var(--c0)}.o1{background:var(--c1);color:#fff}.o2{background:var(--c2)}.o3{background:var(--c3)}
 .opts.done .opt{opacity:.25;pointer-events:none}.opts.done .opt.pick{opacity:1;outline:4px solid #fff}
-.ico{font-size:96px;line-height:1;animation:pop .6s cubic-bezier(.2,2,.4,1)}
+.ico{font-size:72px;line-height:1;animation:pop .6s cubic-bezier(.2,2,.4,1)}
+#v-res{justify-content:flex-start;overflow:auto;gap:8px}
+.recap{width:100%;text-align:left;margin-top:6px}.recap p{margin:0 0 4px;font-weight:700;color:var(--mut);font-size:16px}
+.ro{display:flex;gap:10px;align-items:center;border-radius:12px;padding:10px 14px;font:700 17px/1.2 system-ui;margin-top:8px;color:#0d1117;animation:pop .4s backwards}
+.ro.o1{color:#fff}.ro b{font-size:22px;width:28px;text-align:center;flex:none}.ro.pick{outline:3px solid #fff}
+.ro .tag{margin-left:auto;font-size:12px;font-style:normal;background:rgba(0,0,0,.3);color:#fff;padding:2px 9px;border-radius:99px;white-space:nowrap}
 .pts{font:800 40px ui-monospace,Consolas,monospace}
 .good{color:var(--ok)}.bad{color:var(--red)}
 .rank{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 22px;font-weight:700}
@@ -59,6 +64,7 @@ button.go{background:#238636;color:#fff;border:0;border-radius:12px;padding:15px
     <div class="msg" id="r-msg"></div>
     <div class="pts" id="r-pts"></div>
     <div class="rank" id="r-rank"></div>
+    <div class="recap" id="r-recap"><p id="r-q"></p><div id="r-opts"></div></div>
   </section>
 </main>
 
@@ -169,7 +175,7 @@ function init() {
     if (final) {
       $('#r-ico').textContent = r.pos === 1 ? '🏆' : r.pos <= 3 ? '🎉' : '👏';
       $('#r-msg').textContent = r.pos <= 3 ? '¡Has quedado en el puesto ' + r.pos + '!' : 'Has quedado en el puesto ' + r.pos;
-      $('#r-msg').className = 'msg good'; $('#r-pts').textContent = r.score + ' puntos'; $('#r-rank').textContent = 'Gracias por jugar';
+      $('#r-msg').className = 'msg good'; $('#r-pts').textContent = r.score + ' puntos'; $('#r-rank').textContent = 'Gracias por jugar'; $('#r-recap').style.display = 'none';
       try { localStorage.removeItem('quiz-room'); } catch (e) {}
     } else {
       const rv = S.reveal || {}, ok = mine[S.q] === rv.correct, got = (rv.pts && rv.pts[uid]) || 0, none = mine[S.q] === undefined;
@@ -177,6 +183,18 @@ function init() {
       $('#r-msg').textContent = ok ? '¡Correcto!' : none ? 'Sin respuesta' : 'Incorrecto'; $('#r-msg').className = 'msg ' + (ok ? 'good' : 'bad');
       $('#r-pts').textContent = ok ? '+' + got : '+0';
       $('#r-rank').textContent = 'Puesto ' + r.pos + (r.total ? ' de ' + r.total : '') + ' · ' + r.score + ' puntos';
+      // recordatorio de qué era cada opción (sin decir cuál era la correcta: eso solo sale en la pantalla del presentador)
+      const Q = S.question, box = $('#r-opts'); box.innerHTML = '';
+      $('#r-recap').style.display = Q ? '' : 'none';
+      if (Q) {
+        $('#r-q').textContent = Q.text;
+        (Array.isArray(Q.options) ? Q.options : Object.values(Q.options)).forEach((o, i) => {
+          const d = document.createElement('div'); d.className = 'ro o' + i + (mine[S.q] === i ? ' pick' : '');
+          const sh = document.createElement('b'); sh.textContent = SHAPES[i]; const tx = document.createElement('span'); tx.textContent = o; d.append(sh, tx);
+          if (mine[S.q] === i) { const tg = document.createElement('em'); tg.className = 'tag'; tg.textContent = 'Tu respuesta'; d.append(tg); }
+          box.append(d);
+        });
+      }
     }
     view('v-res');
   }

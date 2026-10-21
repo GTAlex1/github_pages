@@ -1,4 +1,4 @@
-// Pega aquí la configuración de TU proyecto de Firebase (ver README.md, paso 3).
+// Configuración del proyecto de Firebase "github-pages0".
 // Estos datos no son secretos: lo que protege la base de datos son las reglas (database.rules.json).
 window.FIREBASE_CONFIG = {
   apiKey: "AIzaSyCbCs2_DKDS-OqDYjAtZVMuBtSTXuWp0BU",
