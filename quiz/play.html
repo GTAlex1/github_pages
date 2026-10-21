@@ -15,32 +15,33 @@ h1{font-size:44px;line-height:1.05;margin:8px 0 0}.mut{color:var(--mut)}
 input{width:100%;font:700 22px system-ui;padding:14px 16px;border-radius:12px;border:2px solid var(--line);background:var(--panel);color:var(--tx);outline:none}
 input:focus{border-color:var(--c1)}#pinin{letter-spacing:.25em;text-align:center;font-family:ui-monospace,Consolas,monospace}
 button.go{background:#238636;color:#fff;border:0;border-radius:12px;padding:15px;font:800 20px system-ui;cursor:pointer;transition:transform .12s}button.go:active{transform:scale(.96)}button.go:disabled{background:#21262d;color:var(--mut)}
+button.sec{background:transparent;color:var(--mut);border:1px solid var(--line);border-radius:12px;padding:12px 20px;font:700 16px system-ui;cursor:pointer}
+#leave{position:fixed;top:calc(8px + env(safe-area-inset-top));right:10px;z-index:5;display:none;background:rgba(22,27,34,.85);color:var(--mut);border:1px solid var(--line);border-radius:99px;padding:6px 14px;font:700 14px system-ui;cursor:pointer}
 #err{color:var(--red);min-height:1.4em;margin:0}
 .center{align-items:center;justify-content:center;text-align:center}
 .msg{font-size:26px;font-weight:800}
 .dots span{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--blue2);margin:0 4px;animation:bl 1.2s infinite}.dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}
 @keyframes bl{50%{opacity:.2;transform:scale(.6)}}
-.tbar{height:10px;background:var(--line);border-radius:9px;overflow:hidden;flex:none}.tbar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--c0),var(--blue2));transition:width .12s linear}
-#qt{margin:0;font-size:20px;font-weight:700;flex:none}
-.opts{flex:1;display:grid;grid-template-rows:repeat(4,1fr);gap:10px;min-height:0}
-.opt{border:0;border-radius:14px;display:flex;align-items:center;gap:12px;padding:0 16px;font:800 20px/1.2 system-ui;text-align:left;color:#0d1117;cursor:pointer;transition:transform .12s,opacity .3s;animation:pop .4s cubic-bezier(.2,1.6,.4,1) backwards}
-.opt:active{transform:scale(.96)}.opt b{font-size:28px;width:34px;text-align:center;flex:none}
-.opt:nth-child(2){animation-delay:.06s}.opt:nth-child(3){animation-delay:.12s}.opt:nth-child(4){animation-delay:.18s}
+.tbar{height:10px;background:var(--line);border-radius:9px;overflow:hidden;flex:none;margin-top:34px}.tbar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--c0),var(--blue2));transition:width .12s linear}
+.hint{margin:0;text-align:center;font-weight:700;color:var(--mut);flex:none}
+.opts{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:12px;min-height:0}
+.opt{border:0;border-radius:16px;font-size:min(26vw,110px);line-height:1;color:#0d1117;cursor:pointer;transition:transform .12s,opacity .3s;animation:pop .4s cubic-bezier(.2,1.6,.4,1) backwards}
+.opt:active{transform:scale(.95)}.opt:nth-child(2){animation-delay:.06s}.opt:nth-child(3){animation-delay:.12s}.opt:nth-child(4){animation-delay:.18s}
 @keyframes pop{from{transform:scale(.8);opacity:0}}
 .o0{background:var(--c0)}.o1{background:var(--c1);color:#fff}.o2{background:var(--c2)}.o3{background:var(--c3)}
-.opts.done .opt{opacity:.25;pointer-events:none}.opts.done .opt.pick{opacity:1;outline:4px solid #fff}
+.opts.done .opt{opacity:.2;pointer-events:none}.opts.done .opt.pick{opacity:1;outline:5px solid #fff}
 .ico{font-size:72px;line-height:1;animation:pop .6s cubic-bezier(.2,2,.4,1)}
-#v-res{justify-content:flex-start;overflow:auto;gap:8px}
+#v-res{justify-content:flex-start;overflow:auto;gap:8px;padding-top:44px}
+.pts{font:800 40px ui-monospace,Consolas,monospace}.good{color:var(--ok)}.bad{color:var(--red)}
+.rank{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 22px;font-weight:700}
 .recap{width:100%;text-align:left;margin-top:6px}.recap p{margin:0 0 4px;font-weight:700;color:var(--mut);font-size:16px}
 .ro{display:flex;gap:10px;align-items:center;border-radius:12px;padding:10px 14px;font:700 17px/1.2 system-ui;margin-top:8px;color:#0d1117;animation:pop .4s backwards}
 .ro.o1{color:#fff}.ro b{font-size:22px;width:28px;text-align:center;flex:none}.ro.pick{outline:3px solid #fff}
 .ro .tag{margin-left:auto;font-size:12px;font-style:normal;background:rgba(0,0,0,.3);color:#fff;padding:2px 9px;border-radius:99px;white-space:nowrap}
-.pts{font:800 40px ui-monospace,Consolas,monospace}
-.good{color:var(--ok)}.bad{color:var(--red)}
-.rank{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 22px;font-weight:700}
 </style>
 </head>
 <body>
+<button id="leave">Salir</button>
 <main>
   <section class="v on" id="v-join">
     <h1>Quiz Orion</h1>
@@ -51,11 +52,11 @@ button.go{background:#238636;color:#fff;border:0;border-radius:12px;padding:15px
     <p id="err"></p>
   </section>
 
-  <section class="v center" id="v-wait"><div class="msg" id="w-msg"></div><div class="dots"><span></span><span></span><span></span></div></section>
+  <section class="v center" id="v-wait"><div class="msg" id="w-msg"></div><div class="dots"><span></span><span></span><span></span></div><button class="sec" id="w-leave">Salir de la sala</button></section>
 
   <section class="v" id="v-q">
     <div class="tbar"><i id="tb"></i></div>
-    <p id="qt"></p>
+    <p class="hint" id="qhint">Mira la pantalla y elige</p>
     <div class="opts" id="opts"></div>
   </section>
 
@@ -65,6 +66,7 @@ button.go{background:#238636;color:#fff;border:0;border-radius:12px;padding:15px
     <div class="pts" id="r-pts"></div>
     <div class="rank" id="r-rank"></div>
     <div class="recap" id="r-recap"><p id="r-q"></p><div id="r-opts"></div></div>
+    <button class="sec" id="r-leave" style="display:none">Salir</button>
   </section>
 </main>
 
@@ -75,7 +77,7 @@ button.go{background:#238636;color:#fff;border:0;border-radius:12px;padding:15px
 <script>
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const SHAPES = ['▲', '◆', '●', '■'];
-const view = (id, msg) => { $$('.v').forEach(v => v.classList.toggle('on', v.id === id)); if (msg !== undefined) $('#w-msg').textContent = msg; };
+const view = (id, msg) => { $$('.v').forEach(v => v.classList.toggle('on', v.id === id)); if (msg !== undefined) $('#w-msg').textContent = msg; $('#leave').style.display = id === 'v-join' ? 'none' : 'block'; };
 const cfg = window.FIREBASE_CONFIG;
 
 if (!cfg || /PEGA/i.test(cfg.apiKey || '') || typeof firebase === 'undefined') {
@@ -85,21 +87,22 @@ if (!cfg || /PEGA/i.test(cfg.apiKey || '') || typeof firebase === 'undefined') {
 function init() {
   firebase.initializeApp(cfg);
   const db = firebase.database(), auth = firebase.auth(), SV = firebase.database.ServerValue;
-  const S = { state: null, q: -1, question: null, t0: 0, reveal: null, scores: {} };
-  let uid, pin, ref, name, offset = 0, mine = {}, drawn = -1, tmr = null, ready = false;
+  const S = { state: null, q: -1, question: null, t0: 0, reveal: null, scores: {}, got: {} };
+  let uid, pin, ref, name, offset = 0, mine = {}, drawn = -1, tmr = null, ready = false, subs = [];
   db.ref('.info/serverTimeOffset').on('value', s => offset = s.val() || 0);
 
   const qp = new URLSearchParams(location.search).get('pin');
   if (qp) $('#pinin').value = qp.replace(/\D/g, '').slice(0, 6);
   try { const n = localStorage.getItem('quiz-name'); if (n) $('#namein').value = n; } catch (e) {}
+  const forget = () => { try { localStorage.removeItem('quiz-room'); } catch (e) {} };
 
   auth.signInAnonymously().then(async () => {
     uid = auth.currentUser.uid; ready = true;
-    try {   // si recargas la página, vuelves a tu sala
+    try {   // si recargas, vuelves a tu sala (solo si sigue existiendo y no ha terminado)
       const saved = JSON.parse(localStorage.getItem('quiz-room') || 'null');
       if (saved && (!qp || qp === saved.pin)) {
         const p = await db.ref('rooms/' + saved.pin + '/players/' + uid).get(), st = await db.ref('rooms/' + saved.pin + '/state').get();
-        if (p.exists() && st.exists() && st.val() !== 'ended') { pin = saved.pin; name = p.val().name; enter(); }
+        if (p.exists() && st.exists() && st.val() !== 'ended') { pin = saved.pin; name = p.val().name; enter(); } else forget();
       }
     } catch (e) {}
   }).catch(e => { $('#err').textContent = 'No se pudo conectar (' + (e.code || e.message) + ').'; });
@@ -123,13 +126,25 @@ function init() {
 
   function enter() {
     try { localStorage.setItem('quiz-room', JSON.stringify({ pin })); } catch (e) {}
-    ref = db.ref('rooms/' + pin);
-    ['state', 'q', 'question', 't0', 'reveal', 'scores'].forEach(k => ref.child(k).on('value', s => { S[k] = s.val(); render(); }));
+    ref = db.ref('rooms/' + pin); Object.assign(S, { state: null, q: -1, question: null, t0: 0, reveal: null, scores: {}, got: {} }); mine = {}; drawn = -1;
+    ['state', 'q', 'question', 't0', 'reveal', 'scores'].forEach(k => { const r = ref.child(k), cb = s => { S[k] = s.val(); S.got[k] = true; render(); }; r.on('value', cb); subs.push([r, cb]); });
     view('v-wait', '¡Dentro, ' + name + '!');
   }
 
-  async function render() {
-    if (!S.state) return;
+  /* salir de la sala cuando quieras (también si el presentador se ha ido) */
+  async function leave() {
+    clearInterval(tmr); subs.forEach(([r, cb]) => r.off('value', cb)); subs = [];
+    try { if (ref) await ref.child('players/' + uid).remove(); } catch (e) {}
+    forget(); ref = null; pin = null; mine = {}; drawn = -1;
+    $('#pinin').value = ''; $('#err').textContent = ''; $('#b-join').disabled = false; view('v-join');
+  }
+  $('#leave').onclick = () => { if (confirm('¿Salir de la sala?')) leave(); };
+  $('#w-leave').onclick = leave; $('#r-leave').onclick = leave;
+
+  function render() {
+    if (!S.got.state) return;
+    if (!S.state) { view('v-wait', 'La sala ya no existe.'); return; }
+    if (S.state === 'offline') { view('v-wait', 'El presentador se ha desconectado. En cuanto vuelva, seguimos.'); return; }
     if (S.state === 'lobby') { view('v-wait', '¡Dentro, ' + name + '! Mira la pantalla…'); return; }
     if (S.state === 'question') {
       if (!S.question || S.question.i !== S.q || !S.t0) { view('v-wait', 'Preparando…'); return; }
@@ -137,32 +152,32 @@ function init() {
       view('v-q'); return;
     }
     if (S.state === 'reveal') { showResult(false); return; }
-    if (S.state === 'ended') { showResult(true); }
+    if (S.state === 'ended') showResult(true);
   }
 
+  /* en el móvil solo hay formas y colores: la pregunta y las respuestas se leen en la pantalla del presentador */
   async function drawQuestion() {
     const Q = S.question, qi = S.q; clearInterval(tmr);
-    $('#qt').textContent = Q.text;
     const box = $('#opts'); box.className = 'opts'; box.innerHTML = '';
-    (Array.isArray(Q.options) ? Q.options : Object.values(Q.options)).forEach((o, i) => {
-      const b = document.createElement('button'); b.className = 'opt o' + i;
-      const sh = document.createElement('b'); sh.textContent = SHAPES[i]; const tx = document.createElement('span'); tx.textContent = o;
-      b.append(sh, tx); b.onclick = () => answer(qi, i, b); box.append(b);
-    });
+    for (let i = 0; i < 4; i++) {
+      const b = document.createElement('button'); b.className = 'opt o' + i; b.textContent = SHAPES[i]; b.setAttribute('aria-label', 'Opción ' + 'ABCD'[i]);
+      b.onclick = () => answer(qi, i, b); box.append(b);
+    }
+    $('#qhint').textContent = 'Mira la pantalla y elige';
     tmr = setInterval(() => {
       const left = Math.max(0, Q.limit - (Date.now() + offset - S.t0) / 1000);
       $('#tb').style.width = (left / Q.limit * 100) + '%';
       if (left <= 0) { clearInterval(tmr); box.classList.add('done'); }
     }, 100);
-    try { const mineAns = await ref.child('answers/' + qi + '/' + uid).get(); if (mineAns.exists() && drawn === qi) { mine[qi] = mineAns.val().a; box.classList.add('done'); box.children[mine[qi]].classList.add('pick'); } } catch (e) {}
+    try { const m = await ref.child('answers/' + qi + '/' + uid).get(); if (m.exists() && drawn === qi) { mine[qi] = m.val().a; box.classList.add('done'); box.children[mine[qi]].classList.add('pick'); $('#qhint').textContent = 'Respuesta enviada'; } } catch (e) {}
   }
 
   async function answer(qi, i, btn) {
     if (mine[qi] !== undefined) return; mine[qi] = i;
-    const box = $('#opts'); box.classList.add('done'); btn.classList.add('pick');
+    const box = $('#opts'); box.classList.add('done'); btn.classList.add('pick'); $('#qhint').textContent = 'Respuesta enviada';
     try { navigator.vibrate && navigator.vibrate(30); } catch (e) {}
     try { await ref.child('answers/' + qi + '/' + uid).set({ a: i, t: SV.TIMESTAMP }); }
-    catch (e) { delete mine[qi]; box.classList.remove('done'); btn.classList.remove('pick'); }
+    catch (e) { delete mine[qi]; box.classList.remove('done'); btn.classList.remove('pick'); $('#qhint').textContent = 'No se pudo enviar, prueba otra vez'; }
   }
 
   function rankInfo() {
@@ -171,24 +186,23 @@ function init() {
   }
 
   function showResult(final) {
-    clearInterval(tmr); const r = rankInfo();
+    clearInterval(tmr); const r = rankInfo(); $('#r-leave').style.display = final ? '' : 'none';
     if (final) {
       $('#r-ico').textContent = r.pos === 1 ? '🏆' : r.pos <= 3 ? '🎉' : '👏';
       $('#r-msg').textContent = r.pos <= 3 ? '¡Has quedado en el puesto ' + r.pos + '!' : 'Has quedado en el puesto ' + r.pos;
       $('#r-msg').className = 'msg good'; $('#r-pts').textContent = r.score + ' puntos'; $('#r-rank').textContent = 'Gracias por jugar'; $('#r-recap').style.display = 'none';
-      try { localStorage.removeItem('quiz-room'); } catch (e) {}
+      forget();
     } else {
       const rv = S.reveal || {}, ok = mine[S.q] === rv.correct, got = (rv.pts && rv.pts[uid]) || 0, none = mine[S.q] === undefined;
       $('#r-ico').textContent = ok ? '✅' : none ? '⏰' : '❌';
       $('#r-msg').textContent = ok ? '¡Correcto!' : none ? 'Sin respuesta' : 'Incorrecto'; $('#r-msg').className = 'msg ' + (ok ? 'good' : 'bad');
       $('#r-pts').textContent = ok ? '+' + got : '+0';
       $('#r-rank').textContent = 'Puesto ' + r.pos + (r.total ? ' de ' + r.total : '') + ' · ' + r.score + ' puntos';
-      // recordatorio de qué era cada opción (sin decir cuál era la correcta: eso solo sale en la pantalla del presentador)
-      const Q = S.question, box = $('#r-opts'); box.innerHTML = '';
-      $('#r-recap').style.display = Q ? '' : 'none';
-      if (Q) {
-        $('#r-q').textContent = Q.text;
-        (Array.isArray(Q.options) ? Q.options : Object.values(Q.options)).forEach((o, i) => {
+      // ahora que la pregunta ha terminado: qué era cada opción (sin decir cuál era la correcta)
+      const box = $('#r-opts'); box.innerHTML = ''; $('#r-recap').style.display = rv.text ? '' : 'none';
+      if (rv.text) {
+        $('#r-q').textContent = rv.text;
+        (Array.isArray(rv.options) ? rv.options : Object.values(rv.options || {})).forEach((o, i) => {
           const d = document.createElement('div'); d.className = 'ro o' + i + (mine[S.q] === i ? ' pick' : '');
           const sh = document.createElement('b'); sh.textContent = SHAPES[i]; const tx = document.createElement('span'); tx.textContent = o; d.append(sh, tx);
           if (mine[S.q] === i) { const tg = document.createElement('em'); tg.className = 'tag'; tg.textContent = 'Tu respuesta'; d.append(tg); }

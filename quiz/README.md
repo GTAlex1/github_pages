@@ -31,9 +31,14 @@ Es una web estática (va en GitHub Pages) + **Firebase Realtime Database** (grat
 - Si todos han respondido, la pregunta se cierra sola a los 0,7 s.
 - Si recargas el móvil, vuelves a tu sala.
 
+## Si se corta la conexión
+- **El presentador recarga o se sale**: al volver a abrir `host.html` aparece **↺ Reanudar la sala**, con el mismo PIN. Los jugadores siguen dentro y la partida continúa donde estaba.
+- **Mientras el presentador no está**: los móviles muestran "El presentador se ha desconectado" y se reconectan solos cuando vuelve.
+- **Los jugadores pueden salir cuando quieran** con el botón **Salir** (arriba a la derecha). También salen si la sala ya no existe.
+
 ## Cambiar las preguntas
 Edita `preguntas.js`: `q` (pregunta), `o` (4 opciones), `c` (posición de la correcta, de 0 a 3) y `t` (segundos).
-Las respuestas correctas solo están en `host.html`/`preguntas.js`: el móvil de los jugadores no las recibe hasta que se cierra la pregunta.
+En el móvil solo se ven formas y colores (▲ ◆ ● ■): la pregunta y las opciones se leen en la pantalla del presentador. Al cerrarse la pregunta, el móvil muestra si acertaste y qué era cada opción.
 
 ## Seguridad y límites
 - Las reglas impiden que un jugador cambie puntuaciones, vea las respuestas de otros o escriba en la sala del presentador. Los tiempos de respuesta los pone el servidor.

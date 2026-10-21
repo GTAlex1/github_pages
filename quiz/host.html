@@ -65,6 +65,7 @@ h1{font-size:clamp(34px,6vw,76px);line-height:1.05;margin:0}h2{font-size:clamp(2
 <section class="scr on" id="s-start">
   <h1>Quiz Orion</h1>
   <p class="mut">Un Kahoot hecho a mano para el taller de GitHub</p>
+  <p><button class="big" id="b-resume" style="display:none;background:#428bbd"></button></p>
   <p><button class="big" id="b-create">▶ Crear sala</button></p>
   <p class="mut" id="err"></p>
 </section>
@@ -146,17 +147,31 @@ if (!cfg || /PEGA/i.test(cfg.apiKey || '') || typeof firebase === 'undefined') {
 function init() {
   firebase.initializeApp(cfg);
   const db = firebase.database(), auth = firebase.auth(), SV = firebase.database.ServerValue;
-  const QS = window.QUESTIONS;
+  const QS = window.QUESTIONS, KEY = 'quiz-host-room';
   let pin, uid, ref, players = {}, scores = {}, gained = {}, q = -1, t0 = 0, offset = 0, limit = 20, state = 'start', tmr = null, offA = null, lastTick = 99, seen = new Set();
   db.ref('.info/serverTimeOffset').on('value', s => offset = s.val() || 0);
   // Dirección que ven los jugadores (la del QR). En GitHub Pages se calcula sola; fuera de ahí usa la de abajo.
   const PLAY_URL = 'https://gtalex1.github.io/github_pages/quiz/play.html';
   const base = /\.github\.io$/.test(location.hostname) ? location.href.split('#')[0].split('?')[0].replace(/[^/]*$/, '') + 'play.html' : PLAY_URL;
+  const save = () => { try { localStorage.setItem(KEY, pin); } catch (e) {} };
+  const forget = () => { try { localStorage.removeItem(KEY); } catch (e) {} };
+
+  // Si recargas o te sales, la sala sigue viva: aquí puedes reanudarla con el mismo PIN.
+  const authed = auth.signInAnonymously().then(() => { uid = auth.currentUser.uid; });
+  authed.then(async () => {
+    let old = null; try { old = localStorage.getItem(KEY); } catch (e) {}
+    if (!old) return;
+    const h = await db.ref('rooms/' + old + '/host').get(), st = await db.ref('rooms/' + old + '/state').get();
+    if (h.exists() && h.val() === uid && st.exists() && st.val() !== 'ended') {
+      const b = $('#b-resume'); b.style.display = ''; b.textContent = '↺ Reanudar la sala ' + old; b.onclick = () => { unlock(); resume(old); };
+      $('#b-create').textContent = '▶ Crear una sala nueva';
+    } else forget();
+  }).catch(() => {});
 
   $('#b-create').onclick = async () => {
     unlock(); $('#b-create').disabled = true; $('#err').textContent = '';
     try {
-      await auth.signInAnonymously(); uid = auth.currentUser.uid;
+      await authed;
       for (let i = 0; i < 8; i++) { pin = String(100000 + Math.floor(Math.random() * 900000)); if (!(await db.ref('rooms/' + pin + '/host').get()).exists()) break; }
       ref = db.ref('rooms/' + pin);
       await ref.set({ host: uid, state: 'lobby', q: -1 });
@@ -165,11 +180,38 @@ function init() {
       $('#err').textContent = 'No se pudo crear la sala (' + (e.code || e.message) + '). Revisa el README: ¿está activado el acceso anónimo y pegadas las reglas?';
       return;
     }
+    state = 'lobby'; openRoom(); show('s-lobby');
+  };
+
+  // Prepara la sala (también al reanudar): PIN, QR, lista de jugadores y aviso a los móviles si me desconecto.
+  function openRoom() {
+    save();
     $('#pin').textContent = pin; $('#join-url').textContent = base.replace(/^https?:\/\//, '');
     const qr = qrcode(0, 'M'); qr.addData(base + '?pin=' + pin); qr.make(); $('#qr').innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
     ref.child('players').on('value', s => { players = s.val() || {}; drawLobby(); });
-    state = 'lobby'; show('s-lobby');
-  };
+    db.ref('.info/connected').on('value', s => {
+      if (s.val() !== true || !ref || state === 'ended') return;
+      ref.child('state').onDisconnect().set('offline');   // si me voy, los móviles ven "presentador desconectado"
+      ref.child('state').set(state);                      // y al volver se restaura el estado real
+    });
+  }
+
+  async function resume(old) {
+    $('#b-resume').disabled = true; pin = old; ref = db.ref('rooms/' + pin);
+    const g = async k => (await ref.child(k).get()).val();
+    q = await g('q'); if (typeof q !== 'number') q = -1;
+    scores = (await g('scores')) || {}; players = (await g('players')) || {}; t0 = (await g('t0')) || 0;
+    const qd = await g('question'), rv = await g('reveal'); limit = (qd && qd.limit) || 20;
+    state = q < 0 ? 'lobby' : rv ? 'reveal' : 'question';
+    openRoom();
+    if (state === 'lobby') { show('s-lobby'); drawLobby(); }
+    else if (state === 'question') showQuestion();
+    else {
+      const Q = QS[q], A = (await ref.child('answers/' + q).get()).val() || {}, counts = [0, 0, 0, 0];
+      Object.values(A).forEach(a => { if (a && a.a >= 0 && a.a < 4) counts[a.a]++; });
+      gained = rv.pts || {}; drawReveal(Q, counts);
+    }
+  }
 
   function drawLobby() {
     const box = $('#plist'), ids = Object.keys(players);
@@ -184,11 +226,16 @@ function init() {
   $('#b-next').onclick = () => next();
   $('#b-again').onclick = () => location.reload();
 
+  // Los móviles solo reciben el número de pregunta y el tiempo; el texto y las opciones llegan cuando se cierra la pregunta.
   async function next() {
     q++; if (q >= QS.length) return end();
-    const Q = QS[q]; limit = Q.t || 20; gained = {}; lastTick = 99;
-    await ref.update({ q, question: { i: q, text: Q.q, options: Q.o, limit }, t0: SV.TIMESTAMP, reveal: null, state: 'question' });
-    t0 = (await ref.child('t0').get()).val(); state = 'question';
+    const Q = QS[q]; limit = Q.t || 20; gained = {};
+    await ref.update({ q, question: { i: q, limit }, t0: SV.TIMESTAMP, reveal: null, state: 'question' });
+    t0 = (await ref.child('t0').get()).val(); showQuestion();
+  }
+
+  function showQuestion() {
+    const Q = QS[q]; state = 'question'; lastTick = 99;
     $('#qn').textContent = 'Pregunta ' + (q + 1) + ' de ' + QS.length; $('#ans').textContent = '0 respuestas';
     $('#qtext').textContent = Q.q;
     $('#opts').innerHTML = Q.o.map((o, i) => `<div class="opt o${i}"><b>${SHAPES[i]}</b><span></span></div>`).join('');
@@ -220,7 +267,7 @@ function init() {
       pts[p] = g; scores[p] = (scores[p] || 0) + g;
     });
     gained = pts;
-    await ref.update({ reveal: { correct: Q.c, pts }, scores, state: 'reveal' });
+    await ref.update({ reveal: { correct: Q.c, pts, text: Q.q, options: Q.o }, scores, state: 'reveal' });
     beep(523, .25, 'triangle', .16); beep(784, .35, 'triangle', .16, .1);
     drawReveal(Q, counts);
   }
@@ -245,7 +292,9 @@ function init() {
   }
 
   async function end() {
-    state = 'ended'; await ref.update({ state: 'ended' });
+    state = 'ended'; forget();
+    try { await ref.child('state').onDisconnect().cancel(); } catch (e) {}
+    await ref.update({ state: 'ended' });
     const top = ranking().slice(0, 3), order = [1, 0, 2];
     $('#podium').innerHTML = '';
     order.forEach(i => {
@@ -255,13 +304,13 @@ function init() {
       d.querySelector('.nm').textContent = r.name; d.querySelector('.pt').textContent = r.s + ' puntos'; $('#podium').append(d);
     });
     show('s-end');
-    requestAnimationFrame(() => requestAnimationFrame(() => $$('.pl .blk').forEach((b, k) => { const p = b.parentNode.classList.contains('p1') ? 78 : b.parentNode.classList.contains('p2') ? 58 : 42; b.style.height = p + '%'; })));
+    requestAnimationFrame(() => requestAnimationFrame(() => $$('.pl .blk').forEach(b => { const c = b.parentNode.classList; b.style.height = (c.contains('p1') ? 78 : c.contains('p2') ? 58 : 42) + '%'; })));
     fanfare(); setTimeout(confetti, 600);
   }
 
   addEventListener('keydown', e => {
     if (![' ', 'Enter', 'ArrowRight'].includes(e.key)) return;
-    const b = state === 'lobby' ? $('#b-go') : state === 'reveal' ? $('#b-next') : state === 'ended' ? null : null;
+    const b = state === 'lobby' ? $('#b-go') : state === 'reveal' ? $('#b-next') : null;
     if (b && !b.disabled) { e.preventDefault(); b.click(); }
   });
 }
