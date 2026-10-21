@@ -149,7 +149,9 @@ function init() {
   const QS = window.QUESTIONS;
   let pin, uid, ref, players = {}, scores = {}, gained = {}, q = -1, t0 = 0, offset = 0, limit = 20, state = 'start', tmr = null, offA = null, lastTick = 99, seen = new Set();
   db.ref('.info/serverTimeOffset').on('value', s => offset = s.val() || 0);
-  const base = location.href.split('#')[0].split('?')[0].replace(/[^/]*$/, '') + 'play.html';
+  // Dirección que ven los jugadores (la del QR). En GitHub Pages se calcula sola; fuera de ahí usa la de abajo.
+  const PLAY_URL = 'https://gtalex1.github.io/github_pages/quiz/play.html';
+  const base = /\.github\.io$/.test(location.hostname) ? location.href.split('#')[0].split('?')[0].replace(/[^/]*$/, '') + 'play.html' : PLAY_URL;
 
   $('#b-create').onclick = async () => {
     unlock(); $('#b-create').disabled = true; $('#err').textContent = '';
