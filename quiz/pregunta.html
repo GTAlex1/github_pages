@@ -31,7 +31,9 @@ button.del{background:transparent;color:var(--red);border:1px solid var(--line);
   <div class="row"><span class="mut" id="cnt">0 / 3000</span><button id="send">Enviar pregunta</button></div>
   <p id="st"></p>
   <h2>Tus preguntas</h2>
-  <p class="mut" style="margin-top:-6px;font-size:15px">Se guardan en este navegador. Si ya te la han contestado, puedes borrarla.</p>
+  <p class="mut" style="margin-top:-6px;font-size:15px">Tu sesión anónima las recuerda aunque recargues la página. Si ya te la han contestado, puedes borrarla.</p>
+  <p id="who" class="mut" style="font-size:13px;margin:0 0 4px"></p>
+  <p id="sync" class="mut" style="font-size:14px;margin:0 0 6px"></p>
   <div id="mine"><p class="mut">Todavía no has enviado ninguna.</p></div>
 </main>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -44,31 +46,43 @@ if (!cfg || /PEGA/i.test(cfg.apiKey || '') || typeof firebase === 'undefined') {
 else {
   firebase.initializeApp(cfg);
   const db = firebase.database(), auth = firebase.auth(), SV = firebase.database.ServerValue; let uid = null;
+  const note = (t, c) => { $('#sync').textContent = t || ''; $('#sync').className = 'mut ' + (c || ''); };
   $('#text').oninput = () => $('#cnt').textContent = $('#text').value.length + ' / 3000';
-  auth.signInAnonymously().then(() => {      // sesión anónima e invisible: no hay login, solo sirve para reconocer tus preguntas
-    uid = auth.currentUser.uid;
-    db.ref('questions').on('value', s => {
-      const o = s.val() || {}, mine = Object.entries(o).filter(([id, v]) => v && v.uid === uid).sort((a, b) => b[1].ts - a[1].ts), box = $('#mine');
-      box.innerHTML = mine.length ? '' : '<p class="mut">Todavía no has enviado ninguna.</p>';
-      mine.forEach(([id, v]) => {
-        const d = document.createElement('div'); d.className = 'q';
-        const p = document.createElement('p'); p.textContent = v.text;
-        const m = document.createElement('div'); m.className = 'meta';
-        const t = document.createElement('span'); t.textContent = new Date(v.ts).toLocaleString('es-ES', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' });
-        const b = document.createElement('button'); b.className = 'del'; b.textContent = 'Borrar';
-        b.onclick = () => { if (confirm('¿Borrar esta pregunta?')) db.ref('questions/' + id).remove(); };
-        m.append(t, b); d.append(p, m); box.append(d);
-      });
+
+  // Sesión anónima e invisible (no hay login): Firebase la recuerda en este navegador, así que tus preguntas siguen siendo tuyas al recargar.
+  function render(o) {
+    const mine = Object.entries(o).filter(([id, v]) => v && v.text).sort((a, b) => b[1].ts - a[1].ts), box = $('#mine');
+    box.innerHTML = mine.length ? '' : '<p class="mut">Todavía no has enviado ninguna.</p>';
+    mine.forEach(([id, v]) => {
+      const d = document.createElement('div'); d.className = 'q';
+      const p = document.createElement('p'); p.textContent = v.text;
+      const m = document.createElement('div'); m.className = 'meta';
+      const t = document.createElement('span'); t.textContent = new Date(v.ts).toLocaleString('es-ES', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' });
+      const b = document.createElement('button'); b.className = 'del'; b.textContent = 'Borrar';
+      b.onclick = async () => {
+        if (!confirm('¿Borrar esta pregunta?')) return;
+        try { await db.ref('questions/' + uid + '/' + id).remove(); note('Pregunta borrada.', 'ok'); }
+        catch (e) { note('No se pudo borrar (' + (e.code || e.message) + '). Revisa las reglas de Firebase.', 'bad'); }
+      };
+      m.append(t, b); d.append(p, m); box.append(d);
     });
-  }).catch(e => { $('#st').textContent = 'No se pudo conectar (' + (e.code || e.message) + ').'; $('#st').className = 'bad'; });
+  }
+
+  auth.signInAnonymously().then(() => {
+    uid = auth.currentUser.uid;
+    $('#who').textContent = 'Sesión anónima activa · ID ' + uid.slice(0, 6) + '…';
+    db.ref('questions/' + uid).on('value', s => render(s.val() || {}),
+      e => note('No se pueden leer tus preguntas (' + (e.code || e.message) + '). Revisa las reglas en Firebase.', 'bad'));
+  }).catch(e => { $('#st').textContent = 'No se pudo conectar (' + (e.code || e.message) + '). ¿Está activado el acceso anónimo en Firebase?'; $('#st').className = 'bad'; });
+
   $('#send').onclick = async () => {
     const text = $('#text').value.trim(), name = $('#name').value.trim(), st = $('#st'); st.className = '';
     if (!uid) { st.textContent = 'Conectando… prueba otra vez en un segundo.'; return; }
     if (!text) { st.textContent = 'Escribe tu pregunta primero.'; st.className = 'bad'; return; }
     $('#send').disabled = true;
     try {
-      const q = { text, uid, ts: SV.TIMESTAMP }; if (name) q.name = name;
-      await db.ref('questions').push().set(q);
+      const q = { text, ts: SV.TIMESTAMP }; if (name) q.name = name;
+      await db.ref('questions/' + uid).push().set(q);
       $('#text').value = ''; $('#cnt').textContent = '0 / 3000'; st.textContent = '¡Enviada! Puedes mandar otra cuando quieras.'; st.className = 'ok';
     } catch (e) { st.textContent = 'No se pudo enviar (' + (e.code || e.message) + ').'; st.className = 'bad'; }
     $('#send').disabled = false;

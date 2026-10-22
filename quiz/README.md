@@ -33,7 +33,7 @@ Es una web estática (va en GitHub Pages) + **Firebase Realtime Database** (grat
 - Si recargas el móvil, vuelves a tu sala.
 
 ## Preguntas del público (`pregunta.html`)
-- Sin login: Firebase crea una sesión anónima invisible. Se guarda la pregunta con esa identidad, así que quien la escribió puede **borrarla** desde el mismo navegador (sección "Tus preguntas").
+- Sin login: Firebase crea una sesión anónima invisible. Cada pregunta se guarda en `questions/<id de la sesión anónima>/…`, y las reglas solo dejan escribir y borrar ahí a esa sesión. Quien la escribió puede **borrarla** desde el mismo navegador (sección "Tus preguntas"), aunque recargue la página.
 - Cualquier tamaño, hasta 3000 caracteres. Nombre opcional.
 - En la presentación salen en el punto 14, ordenadas por hora. Un clic en una pregunta la tacha (solo en tu pantalla). El botón 💬 de la esquina enseña el QR en cualquier momento.
 - **Hay que volver a pegar las reglas** (`database.rules.json`) en Firebase → Realtime Database → Rules → Publish.

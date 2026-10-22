@@ -63,17 +63,18 @@
     },
     "questions": {
       ".read": true,
-      "$id": {
-        ".write": "auth != null && ((!data.exists() && newData.child('uid').val() === auth.uid) || data.child('uid').val() === auth.uid)",
-        ".validate": "newData.hasChildren(['text', 'uid', 'ts']) && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 3000 && newData.child('uid').val() === auth.uid && newData.child('ts').val() === now",
-        "text": {},
-        "uid": {},
-        "ts": {},
-        "name": {
-          ".validate": "newData.isString() && newData.val().length <= 30"
-        },
-        "$other": {
-          ".validate": false
+      "$uid": {
+        ".write": "auth != null && $uid === auth.uid",
+        "$id": {
+          ".validate": "newData.hasChildren(['text', 'ts']) && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 3000 && newData.child('ts').val() === now",
+          "text": {},
+          "ts": {},
+          "name": {
+            ".validate": "newData.isString() && newData.val().length <= 30"
+          },
+          "$other": {
+            ".validate": false
+          }
         }
       }
     }
