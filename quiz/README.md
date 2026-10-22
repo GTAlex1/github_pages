@@ -6,7 +6,8 @@ Es una web estática (va en GitHub Pages) + **Firebase Realtime Database** (grat
 
 ## Archivos
 - `host.html`: pantalla del presentador (se abre dentro de la presentación, punto 12).
-- `play.html`: lo que ven los jugadores.
+- `play.html`: lo que ven los jugadores. Cada móvil coloca los 4 botones en un orden distinto.
+- `pregunta.html`: página para que el público escriba preguntas durante la presentación (se ven en el punto 14).
 - `preguntas.js`: **las preguntas** (edítalas aquí).
 - `firebase-config.js`: tus datos de Firebase (hay que rellenarlo, ver abajo).
 - `database.rules.json`: reglas de seguridad para pegar en Firebase.
@@ -30,6 +31,13 @@ Es una web estática (va en GitHub Pages) + **Firebase Realtime Database** (grat
 - Respuesta correcta: de 1000 a 500 puntos según lo rápido que respondas. Incorrecta o sin responder: 0.
 - Si todos han respondido, la pregunta se cierra sola a los 0,7 s.
 - Si recargas el móvil, vuelves a tu sala.
+
+## Preguntas del público (`pregunta.html`)
+- Sin login: Firebase crea una sesión anónima invisible. Se guarda la pregunta con esa identidad, así que quien la escribió puede **borrarla** desde el mismo navegador (sección "Tus preguntas").
+- Cualquier tamaño, hasta 3000 caracteres. Nombre opcional.
+- En la presentación salen en el punto 14, ordenadas por hora. Un clic en una pregunta la tacha (solo en tu pantalla). El botón 💬 de la esquina enseña el QR en cualquier momento.
+- **Hay que volver a pegar las reglas** (`database.rules.json`) en Firebase → Realtime Database → Rules → Publish.
+- Para borrar una pregunta ajena o inapropiada: Firebase → Realtime Database → nodo `questions`.
 
 ## Si se corta la conexión
 - **El presentador recarga o se sale**: al volver a abrir `host.html` aparece **↺ Reanudar la sala**, con el mismo PIN. Los jugadores siguen dentro y la partida continúa donde estaba.

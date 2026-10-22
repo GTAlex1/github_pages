@@ -199,19 +199,35 @@ section[data-n]:after{content:attr(data-n);position:absolute;right:2%;top:6%;fon
 @media(prefers-reduced-motion:reduce){#s4 .stepper{display:flex}}
 .qframe{display:none;width:100%;height:78vh;border:1px solid var(--line);border-radius:12px;margin-top:18px;background:#0d1117}.qframe.on{display:block}
 .ver{display:block;margin:16px 8px 0;color:#484f58;font:11px var(--m)}
+.term2{height:460px;scrollbar-width:none}.term2::-webkit-scrollbar{display:none}
+.qa{display:grid;grid-template-columns:200px 1fr;gap:22px;margin:18px 0 8px;align-items:start}
+.qa-qr{background:#fff;border-radius:12px;padding:8px;width:184px}.qa-qr svg{width:100%;height:auto;display:block}
+.qa-side p{font-size:13px;margin:8px 0 0;word-break:break-all}
+.qa-head{display:flex;align-items:center;gap:10px}.qa-head h3{margin:0}.qa-head span{background:var(--blue);color:#fff;border-radius:99px;padding:0 10px;font:700 14px var(--m)}
+.qa-list{display:flex;flex-direction:column;gap:10px;max-height:46vh;overflow:auto;margin-top:12px;padding-right:4px;scrollbar-width:thin;scrollbar-color:#30363d transparent}
+.qq{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:10px;padding:12px 16px;cursor:pointer;white-space:pre-wrap;word-break:break-word;animation:qin .4s}
+.qq small{display:block;color:var(--mut);margin-top:6px;font-size:12px}.qq.done{opacity:.4;text-decoration:line-through;border-left-color:var(--ok)}
+@keyframes qin{from{opacity:0;transform:translateY(8px)}}
+#askbtn{position:fixed;right:14px;bottom:14px;z-index:35;background:rgba(22,27,34,.85);color:var(--tx);border:1px solid var(--line);border-radius:99px;padding:8px 16px;font:600 14px system-ui;cursor:pointer;backdrop-filter:blur(6px)}#askbtn:hover{background:#21262d}
+#askmodal{position:fixed;inset:0;z-index:60;background:rgba(1,4,9,.82);display:grid;place-items:center}#askmodal[hidden]{display:none}
+.askbox{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:26px;text-align:center;max-width:380px;position:relative}.askbox h3{margin:0}.askbox .qa-qr{margin:14px auto;width:250px}.askbox p{font-size:14px;margin:0;word-break:break-all}
+#askx{position:absolute;right:10px;top:8px;background:none;border:0;color:var(--mut);font-size:20px;cursor:pointer}
+@media(max-width:900px){.qa{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div id="pb"><div class="ball" id="pball"></div></div>
 <canvas id="cf"></canvas>
 <div id="glow"></div>
+<button id="askbtn" title="Haz tu pregunta">💬 Preguntas <span id="askn"></span></button>
+<div id="askmodal" hidden><div class="askbox"><button id="askx" aria-label="Cerrar">✕</button><h3>Haz tu pregunta</h3><div class="qa-qr" id="ask-qr2"></div><p class="mut">Sin registro. Entra en <b>gtalex1.github.io/github_pages/quiz/pregunta.html</b> y escríbela cuando quieras: las veremos al final.</p></div></div>
 <button id="snd" aria-label="Activar o silenciar el sonido" title="Sonido (tecla M)">🔊</button>
 <div id="hint">▶ Pulsa para continuar · 🔊 con sonido</div>
 <div class="top">orion-studios / <b>github-presentacion</b></div>
 <aside aria-label="Índice">
   <h2>orion-studios / índice</h2>
   <nav id="nav"></nav>
-  <small class="ver">versión 10</small>
+  <small class="ver">versión 11</small>
 </aside>
 <main>
 
@@ -273,7 +289,7 @@ section[data-n]:after{content:attr(data-n);position:absolute;right:2%;top:6%;fon
 <section id="s4">
   <div class="num">4 / 14</div><h2 class="t">Primeros pasos</h2>
   <div class="duo">
-    <ol class="steps" id="st4"><li>Crea tu cuenta (con 2FA) e instala Git</li><li><b>Fork</b> del repositorio del taller</li><li>Cópialo a tu equipo con <code>git clone</code></li><li>Crea una rama y tu página: <code>switch</code>, <code>add</code>, <code>commit</code></li><li><code>push</code>, abre la <b>Pull Request</b> y <code>pull</code></li></ol>
+    <ol class="steps" id="st4"><li>Crea tu cuenta de GitHub</li><li><b>Fork</b> del repositorio del taller</li><li>Ábrelo en un <b>Codespace</b>: VS Code en el navegador, sin instalar nada</li><li>Crea una rama y tu página: <code>switch</code>, <code>add</code>, <code>commit</code></li><li><code>push</code>, abre la <b>Pull Request</b> y <code>pull</code></li></ol>
     <div class="term2" id="t4"></div>
   </div>
   <div class="stepper"><button class="btn ghost" id="prev4" disabled>← Anterior</button><div class="dots" id="dots4"><i></i><i></i><i></i><i></i><i></i></div><button class="btn" id="next4">Siguiente →</button></div>
@@ -283,7 +299,7 @@ section[data-n]:after{content:attr(data-n);position:absolute;right:2%;top:6%;fon
 <section id="s5">
   <div class="num">5 / 14</div><h2 class="t">Flujo de trabajo colaborativo</h2>
   <div class="duo">
-    <ol class="steps" id="st5"><li><b>Fork</b>: copia el repositorio de otra persona a tu cuenta</li><li><b>Branch</b>: crea una rama y haz tus cambios</li><li><b>Pull Request</b>: propón que tus cambios se unan al proyecto</li><li><b>Code review</b>: el equipo comenta, pide ajustes y aprueba</li><li><b>Merge</b>: los cambios entran en la rama principal</li></ol>
+    <ol class="steps" id="st5"><li><b>Pull Request</b>: tu propuesta llega al repositorio original, con los cambios (diff) y una descripción</li><li><b>Code review</b>: el equipo comenta, pide ajustes y aprueba</li><li><b>Merge</b>: tus cambios entran en <code>main</code> y el issue se cierra solo</li></ol>
     <div>
       <svg class="flow sc" id="prscene" viewBox="0 0 600 370" role="img" aria-label="María hace un fork, crea una rama, abre una pull request, recibe una revisión y se fusiona en el repositorio original">
         <rect x="310" y="10" width="280" height="180" rx="10" fill="#161b22" stroke="#428bbd" stroke-width="2"/>
@@ -313,7 +329,7 @@ section[data-n]:after{content:attr(data-n);position:absolute;right:2%;top:6%;fon
       <div class="mrow"><button class="btn" id="merge" disabled>Merge pull request</button><span class="pill" id="iss">Issue #12 abierto</span></div>
     </div>
   </div>
-  <p class="mut" style="margin-top:16px">Los <b>issues</b> son las tareas e ideas del proyecto. Si la PR incluye «Closes #12», el issue se cierra solo al hacer merge.</p>
+  <p class="mut" style="margin-top:16px">Esto continúa lo del punto 4: tu rama ya está en tu fork. Ahora empieza el trabajo en equipo. Los <b>issues</b> son las tareas e ideas del proyecto; con «Closes #12» en la PR, el issue se cierra solo al hacer merge.</p>
 </section>
 
 <section id="s6">
@@ -417,6 +433,10 @@ section[data-n]:after{content:attr(data-n);position:absolute;right:2%;top:6%;fon
 
 <section id="s14">
   <div class="num">14 / 14</div><h2 class="t">Preguntas y recursos</h2>
+  <div class="qa">
+    <div class="qa-side"><div class="qa-qr" id="qa-qr"></div><p class="mut">Escanea o entra en<br><b>gtalex1.github.io/github_pages/quiz/pregunta.html</b></p></div>
+    <div class="qa-main"><div class="qa-head"><h3>Preguntas del público</h3><span id="qa-count">0</span></div><div class="qa-list" id="qa-list"><p class="mut">Todavía no hay preguntas.</p></div><p class="mut" style="font-size:13px;margin:8px 0 0">Haz clic en una pregunta para tacharla cuando la respondas.</p></div>
+  </div>
   <div class="grid">
     <div class="box b"><h3>Documentación oficial</h3><a href="https://docs.github.com/es">docs.github.com/es</a></div>
     <div class="box b"><h3>GitHub Skills</h3><a href="https://skills.github.com/">skills.github.com</a></div>
@@ -594,19 +614,18 @@ function term4(){if(term4.on)return;term4.on=true;
 const O='gtalex1',R='taller-github',Y='TU_USUARIO',t=$('#t4'),li=[...$('#st4').children],prev=$('#prev4'),next=$('#next4'),dots=[...$('#dots4').children];
 const STEPS=[
 [['link','# 1. Crea tu cuenta → ','github.com/signup','https://github.com/signup'],
- ['link','# 2. Activa el 2FA → ','github.com/settings/security','https://github.com/settings/security'],
- ['link','# 3. Instala Git → ','git-scm.com/downloads','https://git-scm.com/downloads'],
- ['cmd','git --version','comprueba que Git está instalado'],['out','git version 2.x.x'],
- ['cmd',`git config --global user.name "${Y}"`,'quién eres en tus commits'],
- ['cmd','git config --global user.email "tu-correo@ejemplo.com"','tu correo']],
+ ['c','# Con Codespaces no hace falta instalar nada: ni Git ni VS Code']],
 [['link','# Entra en el taller y pulsa Fork → ',`github.com/${O}/${R}`,`https://github.com/${O}/${R}`],
  ['c','# Fork = tu propia copia del repositorio, en tu cuenta'],
  ['link','# Atajo directo → ',`github.com/${O}/${R}/fork`,`https://github.com/${O}/${R}/fork`],
- ['c',`# Por consola: gh repo fork ${O}/${R} --clone  (fork + clone a la vez)`],
  ['link','# ¿Un proyecto nuevo desde cero? → ','github.com/new','https://github.com/new']],
-[['cmd',`git clone https://github.com/${Y}/${R}.git`,'descarga TU fork'],['out',`Cloning into '${R}'...`],['prog','Receiving objects'],['out','✔ Clonado','okl'],
- ['cmd',`cd ${R}`,'entra en la carpeta'],['cmd','code .','la abre en VS Code'],
- ['c','# ¿Sin instalar nada? Code → Codespaces → Create codespace on main']],
+[['c','# En tu fork: Code → Codespaces → Create codespace on main'],
+ ['c','# Se abre VS Code en el navegador, con Git y tu repositorio ya listos'],
+ ['cmd','git --version','Git ya viene instalado'],['out','git version 2.x.x'],
+ ['cmd','git config user.name','tu usuario, ya configurado'],['out',Y],
+ ['cmd','ls','el repositorio ya está clonado'],['out','README.md  estilo.css  index.html  participantes'],
+ ['c',`# En local, sin Codespaces: git clone https://github.com/${Y}/${R}.git`],
+ ['c',`#   cd ${R}  &&  code .`]],
 [['cmd','git status','qué ha cambiado'],['out','On branch main'],['out','nothing to commit, working tree clean'],
  ['cmd',`git switch -c pagina-${Y}`,'crea tu rama y se pasa a ella'],['out',`Switched to a new branch 'pagina-${Y}'`],
  ['cmd',`cp participantes/_plantilla.html participantes/${Y}.html`,'copia la plantilla'],
@@ -661,28 +680,25 @@ const act=i=>{SD.tick('s5',i);li.forEach((x,j)=>{x.classList.toggle('act',j===i)
 const at=e=>{const r=e.getBoundingClientRect();return[r.left+r.width/2,r.top+r.height/2]};
 const chip=async i=>{const a=[62,262],d=[200+i*35,275];CH[i].setAttribute('transform','translate(62,262)');fade(CH[i]);await sleep(250);
 SD.whoosh('s5',.5);await tw(700,t=>{const[x,y]=bez(a,[100,225],[d[0]-50,225],d,t);CH[i].setAttribute('transform',`translate(${x},${y}) scale(${1-.4*t})`)});fade(CH[i],[1,0],150);pop(NB[i])};
+/* punto de partida: lo que ya hicisteis en el punto 4 (fork, rama y dos commits) */
+QA('.fk').forEach(e=>e.style.opacity=1);Q('#brp').style.strokeDashoffset=0;Q('#brl').style.opacity=1;NB[0].style.opacity=1;NB[1].style.opacity=1;
 while(1){svg.getAnimations({subtree:true}).forEach(a=>a.cancel());li.forEach(x=>x.classList.remove('act','dn'));
 b.disabled=true;b.className='btn';b.textContent='Merge pull request';is.className='pill';is.textContent='Issue #12 abierto';pill.setAttribute('fill','#238636');pt.textContent='Open';
-await sleep(500);
-/* 1 fork: el repo se copia a tu cuenta */
-act(0);const g=Q('#ghost');SD.whoosh('s5',1);g.animate([{opacity:.9,transform:'translate(0,0)'},{opacity:.9,transform:'translate(-290px,175px)'}],{duration:1100,fill:'forwards',easing:'cubic-bezier(.5,0,.2,1)'});await sleep(1100);
-QA('.fk').forEach((e,i)=>sleep(i*80).then(()=>pop(e)));fade(g,[.9,0],400);await sleep(1100);
-/* 2 rama con dos commits */
-act(1);await draw(Q('#brp'),700);fade(Q('#brl'));await chip(0);await sleep(250);await chip(1);await sleep(700);
-/* 3 la PR viaja al repo original */
-act(2);pk.setAttribute('cx',235);pk.setAttribute('cy',275);fade(pk,[0,1],150);
-SD.whoosh('s5',.7);await tw(850,t=>{const[x,y]=bez([235,275],[300,275],[300,150],[333,129],t);pk.setAttribute('cx',x);pk.setAttribute('cy',y)});
-fade(pk,[1,0],150);pop(Q('#prrow'));SD.ding('s5');ring(...at(Q('#prrow')),'#238636',6);await sleep(1300);
-/* 4 revisión: comentario, cambio y aprobación */
-act(3);await pop(Q('#bj'));await sleep(900);pop(Q('#bm'));await chip(2);await sleep(500);pop(Q('#okb'));SD.ding('s5');await sleep(1300);
-/* 5 merge */
-act(4);b.disabled=false;await Promise.race([new Promise(r=>b.onclick=r),sleep(2200)]);b.onclick=null;
+await sleep(700);
+/* 1 la PR llega al repositorio original */
+act(0);pk.setAttribute('cx',235);pk.setAttribute('cy',275);fade(pk,[0,1],150);SD.whoosh('s5',.7);
+await tw(850,t=>{const[x,y]=bez([235,275],[300,275],[300,150],[333,129],t);pk.setAttribute('cx',x);pk.setAttribute('cy',y)});
+fade(pk,[1,0],150);pop(Q('#prrow'));SD.ding('s5');ring(...at(Q('#prrow')),'#238636',6);await sleep(1400);
+/* 2 revisión: comentario, cambio y aprobación */
+act(1);await pop(Q('#bj'));await sleep(900);pop(Q('#bm'));await chip(2);await sleep(500);pop(Q('#okb'));SD.ding('s5');await sleep(1300);
+/* 3 merge */
+act(2);b.disabled=false;await Promise.race([new Promise(r=>b.onclick=r),sleep(2200)]);b.onclick=null;
 b.textContent='⏳ Fusionando…';b.disabled=true;SD.click('s5');['#bj','#bm','#okb'].forEach(s=>fade(Q(s),[1,.12],500));await sleep(500);
 SD.whoosh('s5',.9);pk.setAttribute('cx',270);pk.setAttribute('cy',275);fade(pk,[0,1],150);
 await Promise.all([draw(Q('#mp'),900),tw(900,t=>{const[x,y]=bez([270,275],[400,275],[410,85],[500,85],t);pk.setAttribute('cx',x);pk.setAttribute('cy',y)})]);
 fade(pk,[1,0],150);pop(Q('#mn'));SD.boom('s5');SD.success('s5');mr.animate([{transform:'scale(1)',opacity:1},{transform:'scale(4.5)',opacity:0}],{duration:800,easing:'ease-out'});
 pill.setAttribute('fill','#8957e5');pt.textContent='Merged';draw(Q('#m2'),800);
-is.className='pill merged';is.textContent='Issue #12 cerrado';b.classList.add('merged');b.textContent='✔ Merged';li[4].classList.replace('act','dn');
+is.className='pill merged';is.textContent='Issue #12 cerrado';b.classList.add('merged');b.textContent='✔ Merged';li[2].classList.replace('act','dn');
 ring(...at(Q('#mn')),'#8957e5',12);
 await sleep(5500);await svg.animate([{opacity:1},{opacity:0}],{duration:600,fill:'forwards'}).finished}}
 
@@ -719,7 +735,7 @@ for(let i=0;i<cm.length;i++){await sleep(500);cm[i].classList.replace('bad','goo
 const FX={
 s3:()=>setTimeout(()=>flow.start&&flow.start(),500),s4:()=>setTimeout(()=>term4.start&&term4.start(),600),s5:()=>setTimeout(prDemo,700),s11:()=>setTimeout(health,700),
 s6:()=>setTimeout(kanban,700),s9:()=>{$('#s9').classList.add('go');setTimeout(tfa,900);setTimeout(()=>SD.shimmer('s9'),600);setTimeout(()=>SD.ding('s9'),1650);const al=()=>{SD.slide('s9');setTimeout(()=>SD.alert('s9'),350)};setTimeout(()=>{al();setInterval(al,6000)},450)},s7:()=>setTimeout(pipe,900),s10:()=>setTimeout(cop,900),
-s2:()=>{let n=0;const id=setInterval(()=>{SD.blip('s2',n++%2);if(n>40)clearInterval(id)},600)},s12:()=>setTimeout(()=>SD.rec('s12'),500),s14:()=>{$('#s14').classList.add('go');setTimeout(()=>{SD.thump('s14',.6);setInterval(()=>SD.thump('s14',.6),1800)},900)},
+s2:()=>{let n=0;const id=setInterval(()=>{SD.blip('s2',n++%2);if(n>40)clearInterval(id)},600)},s12:()=>setTimeout(()=>SD.rec('s12'),500),s14:()=>{$('#s14').classList.add('go');loadQs();setTimeout(()=>{SD.thump('s14',.6);setInterval(()=>SD.thump('s14',.6),1800)},900)},
 s13(){setTimeout(()=>{boom(innerWidth*.5,innerHeight*.5,150);SD.party('s13');setTimeout(()=>{boom(innerWidth*.3,innerHeight*.6,90);SD.boom('s13')},350);setTimeout(()=>{boom(innerWidth*.75,innerHeight*.55,90);SD.boom('s13')},650)},500)}};
 const rio=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const s=e.target;rio.unobserve(s);s.classList.add('in');
 decode(s.querySelector('.num'));decode(s.querySelector('h2.t'));
@@ -744,6 +760,25 @@ place();const seq=[[0,1],[1,1],[0,2],[2,1],[1,2],[3,1],[2,2],[3,2]];let k=0;
 const[i,c]=seq[k++];col[i]=c;cards[i].classList.toggle('done',c===2);place();SD.slide('s6');if(c===2){await sleep(600);const r=cards[i].getBoundingClientRect();SD.ding('s6');ring(r.left+r.width/2,r.top+10,'#3fb950',6)}}})()}
 function tfa(){if(tfa.on)return;tfa.on=1;const dg=$('#dg'),b=$('#tfb');
 const go=()=>{morph(dg,String(Math.random()*1e6|0).padStart(6,'0').replace(/(\d{3})(\d{3})/,'$1 $2'),500);b.style.transition='none';b.style.width='100%';void b.offsetWidth;b.style.transition='width 2.8s linear';b.style.width='0'};go();setInterval(go,2900)}
+
+/* preguntas del público (Firebase por REST, sin login) */
+const DBURL='https://github-pages0-default-rtdb.europe-west1.firebasedatabase.app',ASK_QR=`<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 132 132"  preserveAspectRatio="xMinYMin meet"><rect width="100%" height="100%" fill="white" cx="0" cy="0"/><path d="M0,0l4,0 0,4 -4,0 0,-4z M4,0l4,0 0,4 -4,0 0,-4z M8,0l4,0 0,4 -4,0 0,-4z M12,0l4,0 0,4 -4,0 0,-4z M16,0l4,0 0,4 -4,0 0,-4z M20,0l4,0 0,4 -4,0 0,-4z M24,0l4,0 0,4 -4,0 0,-4z M44,0l4,0 0,4 -4,0 0,-4z M56,0l4,0 0,4 -4,0 0,-4z M60,0l4,0 0,4 -4,0 0,-4z M68,0l4,0 0,4 -4,0 0,-4z M72,0l4,0 0,4 -4,0 0,-4z M76,0l4,0 0,4 -4,0 0,-4z M92,0l4,0 0,4 -4,0 0,-4z M104,0l4,0 0,4 -4,0 0,-4z M108,0l4,0 0,4 -4,0 0,-4z M112,0l4,0 0,4 -4,0 0,-4z M116,0l4,0 0,4 -4,0 0,-4z M120,0l4,0 0,4 -4,0 0,-4z M124,0l4,0 0,4 -4,0 0,-4z M128,0l4,0 0,4 -4,0 0,-4z M0,4l4,0 0,4 -4,0 0,-4z M24,4l4,0 0,4 -4,0 0,-4z M40,4l4,0 0,4 -4,0 0,-4z M60,4l4,0 0,4 -4,0 0,-4z M64,4l4,0 0,4 -4,0 0,-4z M72,4l4,0 0,4 -4,0 0,-4z M80,4l4,0 0,4 -4,0 0,-4z M84,4l4,0 0,4 -4,0 0,-4z M88,4l4,0 0,4 -4,0 0,-4z M92,4l4,0 0,4 -4,0 0,-4z M96,4l4,0 0,4 -4,0 0,-4z M104,4l4,0 0,4 -4,0 0,-4z M128,4l4,0 0,4 -4,0 0,-4z M0,8l4,0 0,4 -4,0 0,-4z M8,8l4,0 0,4 -4,0 0,-4z M12,8l4,0 0,4 -4,0 0,-4z M16,8l4,0 0,4 -4,0 0,-4z M24,8l4,0 0,4 -4,0 0,-4z M36,8l4,0 0,4 -4,0 0,-4z M44,8l4,0 0,4 -4,0 0,-4z M56,8l4,0 0,4 -4,0 0,-4z M68,8l4,0 0,4 -4,0 0,-4z M72,8l4,0 0,4 -4,0 0,-4z M80,8l4,0 0,4 -4,0 0,-4z M88,8l4,0 0,4 -4,0 0,-4z M92,8l4,0 0,4 -4,0 0,-4z M104,8l4,0 0,4 -4,0 0,-4z M112,8l4,0 0,4 -4,0 0,-4z M116,8l4,0 0,4 -4,0 0,-4z M120,8l4,0 0,4 -4,0 0,-4z M128,8l4,0 0,4 -4,0 0,-4z M0,12l4,0 0,4 -4,0 0,-4z M8,12l4,0 0,4 -4,0 0,-4z M12,12l4,0 0,4 -4,0 0,-4z M16,12l4,0 0,4 -4,0 0,-4z M24,12l4,0 0,4 -4,0 0,-4z M52,12l4,0 0,4 -4,0 0,-4z M60,12l4,0 0,4 -4,0 0,-4z M72,12l4,0 0,4 -4,0 0,-4z M76,12l4,0 0,4 -4,0 0,-4z M88,12l4,0 0,4 -4,0 0,-4z M92,12l4,0 0,4 -4,0 0,-4z M96,12l4,0 0,4 -4,0 0,-4z M104,12l4,0 0,4 -4,0 0,-4z M112,12l4,0 0,4 -4,0 0,-4z M116,12l4,0 0,4 -4,0 0,-4z M120,12l4,0 0,4 -4,0 0,-4z M128,12l4,0 0,4 -4,0 0,-4z M0,16l4,0 0,4 -4,0 0,-4z M8,16l4,0 0,4 -4,0 0,-4z M12,16l4,0 0,4 -4,0 0,-4z M16,16l4,0 0,4 -4,0 0,-4z M24,16l4,0 0,4 -4,0 0,-4z M40,16l4,0 0,4 -4,0 0,-4z M64,16l4,0 0,4 -4,0 0,-4z M72,16l4,0 0,4 -4,0 0,-4z M80,16l4,0 0,4 -4,0 0,-4z M84,16l4,0 0,4 -4,0 0,-4z M88,16l4,0 0,4 -4,0 0,-4z M92,16l4,0 0,4 -4,0 0,-4z M104,16l4,0 0,4 -4,0 0,-4z M112,16l4,0 0,4 -4,0 0,-4z M116,16l4,0 0,4 -4,0 0,-4z M120,16l4,0 0,4 -4,0 0,-4z M128,16l4,0 0,4 -4,0 0,-4z M0,20l4,0 0,4 -4,0 0,-4z M24,20l4,0 0,4 -4,0 0,-4z M32,20l4,0 0,4 -4,0 0,-4z M36,20l4,0 0,4 -4,0 0,-4z M40,20l4,0 0,4 -4,0 0,-4z M44,20l4,0 0,4 -4,0 0,-4z M48,20l4,0 0,4 -4,0 0,-4z M52,20l4,0 0,4 -4,0 0,-4z M56,20l4,0 0,4 -4,0 0,-4z M68,20l4,0 0,4 -4,0 0,-4z M76,20l4,0 0,4 -4,0 0,-4z M84,20l4,0 0,4 -4,0 0,-4z M96,20l4,0 0,4 -4,0 0,-4z M104,20l4,0 0,4 -4,0 0,-4z M128,20l4,0 0,4 -4,0 0,-4z M0,24l4,0 0,4 -4,0 0,-4z M4,24l4,0 0,4 -4,0 0,-4z M8,24l4,0 0,4 -4,0 0,-4z M12,24l4,0 0,4 -4,0 0,-4z M16,24l4,0 0,4 -4,0 0,-4z M20,24l4,0 0,4 -4,0 0,-4z M24,24l4,0 0,4 -4,0 0,-4z M32,24l4,0 0,4 -4,0 0,-4z M40,24l4,0 0,4 -4,0 0,-4z M48,24l4,0 0,4 -4,0 0,-4z M56,24l4,0 0,4 -4,0 0,-4z M64,24l4,0 0,4 -4,0 0,-4z M72,24l4,0 0,4 -4,0 0,-4z M80,24l4,0 0,4 -4,0 0,-4z M88,24l4,0 0,4 -4,0 0,-4z M96,24l4,0 0,4 -4,0 0,-4z M104,24l4,0 0,4 -4,0 0,-4z M108,24l4,0 0,4 -4,0 0,-4z M112,24l4,0 0,4 -4,0 0,-4z M116,24l4,0 0,4 -4,0 0,-4z M120,24l4,0 0,4 -4,0 0,-4z M124,24l4,0 0,4 -4,0 0,-4z M128,24l4,0 0,4 -4,0 0,-4z M40,28l4,0 0,4 -4,0 0,-4z M68,28l4,0 0,4 -4,0 0,-4z M84,28l4,0 0,4 -4,0 0,-4z M88,28l4,0 0,4 -4,0 0,-4z M96,28l4,0 0,4 -4,0 0,-4z M0,32l4,0 0,4 -4,0 0,-4z M12,32l4,0 0,4 -4,0 0,-4z M20,32l4,0 0,4 -4,0 0,-4z M24,32l4,0 0,4 -4,0 0,-4z M32,32l4,0 0,4 -4,0 0,-4z M36,32l4,0 0,4 -4,0 0,-4z M44,32l4,0 0,4 -4,0 0,-4z M48,32l4,0 0,4 -4,0 0,-4z M52,32l4,0 0,4 -4,0 0,-4z M56,32l4,0 0,4 -4,0 0,-4z M60,32l4,0 0,4 -4,0 0,-4z M72,32l4,0 0,4 -4,0 0,-4z M80,32l4,0 0,4 -4,0 0,-4z M84,32l4,0 0,4 -4,0 0,-4z M88,32l4,0 0,4 -4,0 0,-4z M96,32l4,0 0,4 -4,0 0,-4z M100,32l4,0 0,4 -4,0 0,-4z M108,32l4,0 0,4 -4,0 0,-4z M0,36l4,0 0,4 -4,0 0,-4z M8,36l4,0 0,4 -4,0 0,-4z M12,36l4,0 0,4 -4,0 0,-4z M20,36l4,0 0,4 -4,0 0,-4z M28,36l4,0 0,4 -4,0 0,-4z M36,36l4,0 0,4 -4,0 0,-4z M44,36l4,0 0,4 -4,0 0,-4z M56,36l4,0 0,4 -4,0 0,-4z M64,36l4,0 0,4 -4,0 0,-4z M80,36l4,0 0,4 -4,0 0,-4z M84,36l4,0 0,4 -4,0 0,-4z M88,36l4,0 0,4 -4,0 0,-4z M96,36l4,0 0,4 -4,0 0,-4z M100,36l4,0 0,4 -4,0 0,-4z M104,36l4,0 0,4 -4,0 0,-4z M108,36l4,0 0,4 -4,0 0,-4z M128,36l4,0 0,4 -4,0 0,-4z M0,40l4,0 0,4 -4,0 0,-4z M4,40l4,0 0,4 -4,0 0,-4z M8,40l4,0 0,4 -4,0 0,-4z M12,40l4,0 0,4 -4,0 0,-4z M16,40l4,0 0,4 -4,0 0,-4z M24,40l4,0 0,4 -4,0 0,-4z M32,40l4,0 0,4 -4,0 0,-4z M44,40l4,0 0,4 -4,0 0,-4z M64,40l4,0 0,4 -4,0 0,-4z M72,40l4,0 0,4 -4,0 0,-4z M76,40l4,0 0,4 -4,0 0,-4z M80,40l4,0 0,4 -4,0 0,-4z M84,40l4,0 0,4 -4,0 0,-4z M96,40l4,0 0,4 -4,0 0,-4z M108,40l4,0 0,4 -4,0 0,-4z M112,40l4,0 0,4 -4,0 0,-4z M120,40l4,0 0,4 -4,0 0,-4z M128,40l4,0 0,4 -4,0 0,-4z M0,44l4,0 0,4 -4,0 0,-4z M8,44l4,0 0,4 -4,0 0,-4z M32,44l4,0 0,4 -4,0 0,-4z M40,44l4,0 0,4 -4,0 0,-4z M56,44l4,0 0,4 -4,0 0,-4z M60,44l4,0 0,4 -4,0 0,-4z M76,44l4,0 0,4 -4,0 0,-4z M80,44l4,0 0,4 -4,0 0,-4z M84,44l4,0 0,4 -4,0 0,-4z M96,44l4,0 0,4 -4,0 0,-4z M112,44l4,0 0,4 -4,0 0,-4z M116,44l4,0 0,4 -4,0 0,-4z M4,48l4,0 0,4 -4,0 0,-4z M8,48l4,0 0,4 -4,0 0,-4z M16,48l4,0 0,4 -4,0 0,-4z M20,48l4,0 0,4 -4,0 0,-4z M24,48l4,0 0,4 -4,0 0,-4z M28,48l4,0 0,4 -4,0 0,-4z M32,48l4,0 0,4 -4,0 0,-4z M36,48l4,0 0,4 -4,0 0,-4z M48,48l4,0 0,4 -4,0 0,-4z M60,48l4,0 0,4 -4,0 0,-4z M68,48l4,0 0,4 -4,0 0,-4z M76,48l4,0 0,4 -4,0 0,-4z M80,48l4,0 0,4 -4,0 0,-4z M84,48l4,0 0,4 -4,0 0,-4z M92,48l4,0 0,4 -4,0 0,-4z M96,48l4,0 0,4 -4,0 0,-4z M100,48l4,0 0,4 -4,0 0,-4z M104,48l4,0 0,4 -4,0 0,-4z M116,48l4,0 0,4 -4,0 0,-4z M124,48l4,0 0,4 -4,0 0,-4z M0,52l4,0 0,4 -4,0 0,-4z M20,52l4,0 0,4 -4,0 0,-4z M28,52l4,0 0,4 -4,0 0,-4z M44,52l4,0 0,4 -4,0 0,-4z M60,52l4,0 0,4 -4,0 0,-4z M64,52l4,0 0,4 -4,0 0,-4z M72,52l4,0 0,4 -4,0 0,-4z M76,52l4,0 0,4 -4,0 0,-4z M80,52l4,0 0,4 -4,0 0,-4z M84,52l4,0 0,4 -4,0 0,-4z M88,52l4,0 0,4 -4,0 0,-4z M100,52l4,0 0,4 -4,0 0,-4z M104,52l4,0 0,4 -4,0 0,-4z M108,52l4,0 0,4 -4,0 0,-4z M112,52l4,0 0,4 -4,0 0,-4z M116,52l4,0 0,4 -4,0 0,-4z M124,52l4,0 0,4 -4,0 0,-4z M128,52l4,0 0,4 -4,0 0,-4z M0,56l4,0 0,4 -4,0 0,-4z M20,56l4,0 0,4 -4,0 0,-4z M24,56l4,0 0,4 -4,0 0,-4z M28,56l4,0 0,4 -4,0 0,-4z M36,56l4,0 0,4 -4,0 0,-4z M44,56l4,0 0,4 -4,0 0,-4z M52,56l4,0 0,4 -4,0 0,-4z M56,56l4,0 0,4 -4,0 0,-4z M88,56l4,0 0,4 -4,0 0,-4z M92,56l4,0 0,4 -4,0 0,-4z M96,56l4,0 0,4 -4,0 0,-4z M100,56l4,0 0,4 -4,0 0,-4z M104,56l4,0 0,4 -4,0 0,-4z M108,56l4,0 0,4 -4,0 0,-4z M116,56l4,0 0,4 -4,0 0,-4z M120,56l4,0 0,4 -4,0 0,-4z M124,56l4,0 0,4 -4,0 0,-4z M8,60l4,0 0,4 -4,0 0,-4z M12,60l4,0 0,4 -4,0 0,-4z M16,60l4,0 0,4 -4,0 0,-4z M20,60l4,0 0,4 -4,0 0,-4z M28,60l4,0 0,4 -4,0 0,-4z M32,60l4,0 0,4 -4,0 0,-4z M36,60l4,0 0,4 -4,0 0,-4z M60,60l4,0 0,4 -4,0 0,-4z M68,60l4,0 0,4 -4,0 0,-4z M76,60l4,0 0,4 -4,0 0,-4z M80,60l4,0 0,4 -4,0 0,-4z M84,60l4,0 0,4 -4,0 0,-4z M88,60l4,0 0,4 -4,0 0,-4z M104,60l4,0 0,4 -4,0 0,-4z M108,60l4,0 0,4 -4,0 0,-4z M124,60l4,0 0,4 -4,0 0,-4z M4,64l4,0 0,4 -4,0 0,-4z M12,64l4,0 0,4 -4,0 0,-4z M20,64l4,0 0,4 -4,0 0,-4z M24,64l4,0 0,4 -4,0 0,-4z M32,64l4,0 0,4 -4,0 0,-4z M40,64l4,0 0,4 -4,0 0,-4z M52,64l4,0 0,4 -4,0 0,-4z M68,64l4,0 0,4 -4,0 0,-4z M76,64l4,0 0,4 -4,0 0,-4z M80,64l4,0 0,4 -4,0 0,-4z M84,64l4,0 0,4 -4,0 0,-4z M92,64l4,0 0,4 -4,0 0,-4z M96,64l4,0 0,4 -4,0 0,-4z M104,64l4,0 0,4 -4,0 0,-4z M112,64l4,0 0,4 -4,0 0,-4z M124,64l4,0 0,4 -4,0 0,-4z M4,68l4,0 0,4 -4,0 0,-4z M12,68l4,0 0,4 -4,0 0,-4z M16,68l4,0 0,4 -4,0 0,-4z M28,68l4,0 0,4 -4,0 0,-4z M64,68l4,0 0,4 -4,0 0,-4z M84,68l4,0 0,4 -4,0 0,-4z M92,68l4,0 0,4 -4,0 0,-4z M96,68l4,0 0,4 -4,0 0,-4z M100,68l4,0 0,4 -4,0 0,-4z M108,68l4,0 0,4 -4,0 0,-4z M116,68l4,0 0,4 -4,0 0,-4z M128,68l4,0 0,4 -4,0 0,-4z M4,72l4,0 0,4 -4,0 0,-4z M24,72l4,0 0,4 -4,0 0,-4z M28,72l4,0 0,4 -4,0 0,-4z M56,72l4,0 0,4 -4,0 0,-4z M80,72l4,0 0,4 -4,0 0,-4z M104,72l4,0 0,4 -4,0 0,-4z M120,72l4,0 0,4 -4,0 0,-4z M124,72l4,0 0,4 -4,0 0,-4z M128,72l4,0 0,4 -4,0 0,-4z M0,76l4,0 0,4 -4,0 0,-4z M12,76l4,0 0,4 -4,0 0,-4z M16,76l4,0 0,4 -4,0 0,-4z M20,76l4,0 0,4 -4,0 0,-4z M36,76l4,0 0,4 -4,0 0,-4z M40,76l4,0 0,4 -4,0 0,-4z M52,76l4,0 0,4 -4,0 0,-4z M56,76l4,0 0,4 -4,0 0,-4z M68,76l4,0 0,4 -4,0 0,-4z M80,76l4,0 0,4 -4,0 0,-4z M84,76l4,0 0,4 -4,0 0,-4z M92,76l4,0 0,4 -4,0 0,-4z M100,76l4,0 0,4 -4,0 0,-4z M108,76l4,0 0,4 -4,0 0,-4z M128,76l4,0 0,4 -4,0 0,-4z M0,80l4,0 0,4 -4,0 0,-4z M12,80l4,0 0,4 -4,0 0,-4z M16,80l4,0 0,4 -4,0 0,-4z M20,80l4,0 0,4 -4,0 0,-4z M24,80l4,0 0,4 -4,0 0,-4z M48,80l4,0 0,4 -4,0 0,-4z M52,80l4,0 0,4 -4,0 0,-4z M64,80l4,0 0,4 -4,0 0,-4z M80,80l4,0 0,4 -4,0 0,-4z M84,80l4,0 0,4 -4,0 0,-4z M92,80l4,0 0,4 -4,0 0,-4z M100,80l4,0 0,4 -4,0 0,-4z M108,80l4,0 0,4 -4,0 0,-4z M12,84l4,0 0,4 -4,0 0,-4z M32,84l4,0 0,4 -4,0 0,-4z M36,84l4,0 0,4 -4,0 0,-4z M44,84l4,0 0,4 -4,0 0,-4z M52,84l4,0 0,4 -4,0 0,-4z M60,84l4,0 0,4 -4,0 0,-4z M64,84l4,0 0,4 -4,0 0,-4z M80,84l4,0 0,4 -4,0 0,-4z M96,84l4,0 0,4 -4,0 0,-4z M104,84l4,0 0,4 -4,0 0,-4z M116,84l4,0 0,4 -4,0 0,-4z M124,84l4,0 0,4 -4,0 0,-4z M128,84l4,0 0,4 -4,0 0,-4z M0,88l4,0 0,4 -4,0 0,-4z M4,88l4,0 0,4 -4,0 0,-4z M8,88l4,0 0,4 -4,0 0,-4z M20,88l4,0 0,4 -4,0 0,-4z M24,88l4,0 0,4 -4,0 0,-4z M28,88l4,0 0,4 -4,0 0,-4z M36,88l4,0 0,4 -4,0 0,-4z M40,88l4,0 0,4 -4,0 0,-4z M48,88l4,0 0,4 -4,0 0,-4z M56,88l4,0 0,4 -4,0 0,-4z M60,88l4,0 0,4 -4,0 0,-4z M72,88l4,0 0,4 -4,0 0,-4z M76,88l4,0 0,4 -4,0 0,-4z M80,88l4,0 0,4 -4,0 0,-4z M84,88l4,0 0,4 -4,0 0,-4z M88,88l4,0 0,4 -4,0 0,-4z M104,88l4,0 0,4 -4,0 0,-4z M108,88l4,0 0,4 -4,0 0,-4z M116,88l4,0 0,4 -4,0 0,-4z M120,88l4,0 0,4 -4,0 0,-4z M128,88l4,0 0,4 -4,0 0,-4z M4,92l4,0 0,4 -4,0 0,-4z M8,92l4,0 0,4 -4,0 0,-4z M12,92l4,0 0,4 -4,0 0,-4z M20,92l4,0 0,4 -4,0 0,-4z M36,92l4,0 0,4 -4,0 0,-4z M40,92l4,0 0,4 -4,0 0,-4z M48,92l4,0 0,4 -4,0 0,-4z M64,92l4,0 0,4 -4,0 0,-4z M72,92l4,0 0,4 -4,0 0,-4z M84,92l4,0 0,4 -4,0 0,-4z M116,92l4,0 0,4 -4,0 0,-4z M128,92l4,0 0,4 -4,0 0,-4z M0,96l4,0 0,4 -4,0 0,-4z M20,96l4,0 0,4 -4,0 0,-4z M24,96l4,0 0,4 -4,0 0,-4z M28,96l4,0 0,4 -4,0 0,-4z M32,96l4,0 0,4 -4,0 0,-4z M40,96l4,0 0,4 -4,0 0,-4z M48,96l4,0 0,4 -4,0 0,-4z M60,96l4,0 0,4 -4,0 0,-4z M64,96l4,0 0,4 -4,0 0,-4z M68,96l4,0 0,4 -4,0 0,-4z M76,96l4,0 0,4 -4,0 0,-4z M84,96l4,0 0,4 -4,0 0,-4z M92,96l4,0 0,4 -4,0 0,-4z M96,96l4,0 0,4 -4,0 0,-4z M100,96l4,0 0,4 -4,0 0,-4z M104,96l4,0 0,4 -4,0 0,-4z M108,96l4,0 0,4 -4,0 0,-4z M112,96l4,0 0,4 -4,0 0,-4z M32,100l4,0 0,4 -4,0 0,-4z M36,100l4,0 0,4 -4,0 0,-4z M40,100l4,0 0,4 -4,0 0,-4z M48,100l4,0 0,4 -4,0 0,-4z M56,100l4,0 0,4 -4,0 0,-4z M76,100l4,0 0,4 -4,0 0,-4z M80,100l4,0 0,4 -4,0 0,-4z M84,100l4,0 0,4 -4,0 0,-4z M88,100l4,0 0,4 -4,0 0,-4z M92,100l4,0 0,4 -4,0 0,-4z M96,100l4,0 0,4 -4,0 0,-4z M112,100l4,0 0,4 -4,0 0,-4z M116,100l4,0 0,4 -4,0 0,-4z M128,100l4,0 0,4 -4,0 0,-4z M0,104l4,0 0,4 -4,0 0,-4z M4,104l4,0 0,4 -4,0 0,-4z M8,104l4,0 0,4 -4,0 0,-4z M12,104l4,0 0,4 -4,0 0,-4z M16,104l4,0 0,4 -4,0 0,-4z M20,104l4,0 0,4 -4,0 0,-4z M24,104l4,0 0,4 -4,0 0,-4z M40,104l4,0 0,4 -4,0 0,-4z M44,104l4,0 0,4 -4,0 0,-4z M48,104l4,0 0,4 -4,0 0,-4z M68,104l4,0 0,4 -4,0 0,-4z M80,104l4,0 0,4 -4,0 0,-4z M84,104l4,0 0,4 -4,0 0,-4z M96,104l4,0 0,4 -4,0 0,-4z M104,104l4,0 0,4 -4,0 0,-4z M112,104l4,0 0,4 -4,0 0,-4z M116,104l4,0 0,4 -4,0 0,-4z M120,104l4,0 0,4 -4,0 0,-4z M124,104l4,0 0,4 -4,0 0,-4z M0,108l4,0 0,4 -4,0 0,-4z M24,108l4,0 0,4 -4,0 0,-4z M32,108l4,0 0,4 -4,0 0,-4z M36,108l4,0 0,4 -4,0 0,-4z M40,108l4,0 0,4 -4,0 0,-4z M44,108l4,0 0,4 -4,0 0,-4z M64,108l4,0 0,4 -4,0 0,-4z M68,108l4,0 0,4 -4,0 0,-4z M72,108l4,0 0,4 -4,0 0,-4z M76,108l4,0 0,4 -4,0 0,-4z M84,108l4,0 0,4 -4,0 0,-4z M88,108l4,0 0,4 -4,0 0,-4z M96,108l4,0 0,4 -4,0 0,-4z M112,108l4,0 0,4 -4,0 0,-4z M0,112l4,0 0,4 -4,0 0,-4z M8,112l4,0 0,4 -4,0 0,-4z M12,112l4,0 0,4 -4,0 0,-4z M16,112l4,0 0,4 -4,0 0,-4z M24,112l4,0 0,4 -4,0 0,-4z M40,112l4,0 0,4 -4,0 0,-4z M48,112l4,0 0,4 -4,0 0,-4z M52,112l4,0 0,4 -4,0 0,-4z M56,112l4,0 0,4 -4,0 0,-4z M60,112l4,0 0,4 -4,0 0,-4z M68,112l4,0 0,4 -4,0 0,-4z M80,112l4,0 0,4 -4,0 0,-4z M84,112l4,0 0,4 -4,0 0,-4z M88,112l4,0 0,4 -4,0 0,-4z M96,112l4,0 0,4 -4,0 0,-4z M100,112l4,0 0,4 -4,0 0,-4z M104,112l4,0 0,4 -4,0 0,-4z M108,112l4,0 0,4 -4,0 0,-4z M112,112l4,0 0,4 -4,0 0,-4z M116,112l4,0 0,4 -4,0 0,-4z M128,112l4,0 0,4 -4,0 0,-4z M0,116l4,0 0,4 -4,0 0,-4z M8,116l4,0 0,4 -4,0 0,-4z M12,116l4,0 0,4 -4,0 0,-4z M16,116l4,0 0,4 -4,0 0,-4z M24,116l4,0 0,4 -4,0 0,-4z M32,116l4,0 0,4 -4,0 0,-4z M36,116l4,0 0,4 -4,0 0,-4z M40,116l4,0 0,4 -4,0 0,-4z M44,116l4,0 0,4 -4,0 0,-4z M52,116l4,0 0,4 -4,0 0,-4z M60,116l4,0 0,4 -4,0 0,-4z M68,116l4,0 0,4 -4,0 0,-4z M84,116l4,0 0,4 -4,0 0,-4z M88,116l4,0 0,4 -4,0 0,-4z M104,116l4,0 0,4 -4,0 0,-4z M112,116l4,0 0,4 -4,0 0,-4z M116,116l4,0 0,4 -4,0 0,-4z M0,120l4,0 0,4 -4,0 0,-4z M8,120l4,0 0,4 -4,0 0,-4z M12,120l4,0 0,4 -4,0 0,-4z M16,120l4,0 0,4 -4,0 0,-4z M24,120l4,0 0,4 -4,0 0,-4z M36,120l4,0 0,4 -4,0 0,-4z M40,120l4,0 0,4 -4,0 0,-4z M44,120l4,0 0,4 -4,0 0,-4z M48,120l4,0 0,4 -4,0 0,-4z M64,120l4,0 0,4 -4,0 0,-4z M68,120l4,0 0,4 -4,0 0,-4z M84,120l4,0 0,4 -4,0 0,-4z M92,120l4,0 0,4 -4,0 0,-4z M96,120l4,0 0,4 -4,0 0,-4z M100,120l4,0 0,4 -4,0 0,-4z M112,120l4,0 0,4 -4,0 0,-4z M116,120l4,0 0,4 -4,0 0,-4z M128,120l4,0 0,4 -4,0 0,-4z M0,124l4,0 0,4 -4,0 0,-4z M24,124l4,0 0,4 -4,0 0,-4z M36,124l4,0 0,4 -4,0 0,-4z M40,124l4,0 0,4 -4,0 0,-4z M44,124l4,0 0,4 -4,0 0,-4z M52,124l4,0 0,4 -4,0 0,-4z M60,124l4,0 0,4 -4,0 0,-4z M68,124l4,0 0,4 -4,0 0,-4z M72,124l4,0 0,4 -4,0 0,-4z M80,124l4,0 0,4 -4,0 0,-4z M84,124l4,0 0,4 -4,0 0,-4z M92,124l4,0 0,4 -4,0 0,-4z M96,124l4,0 0,4 -4,0 0,-4z M100,124l4,0 0,4 -4,0 0,-4z M0,128l4,0 0,4 -4,0 0,-4z M4,128l4,0 0,4 -4,0 0,-4z M8,128l4,0 0,4 -4,0 0,-4z M12,128l4,0 0,4 -4,0 0,-4z M16,128l4,0 0,4 -4,0 0,-4z M20,128l4,0 0,4 -4,0 0,-4z M24,128l4,0 0,4 -4,0 0,-4z M32,128l4,0 0,4 -4,0 0,-4z M40,128l4,0 0,4 -4,0 0,-4z M52,128l4,0 0,4 -4,0 0,-4z M56,128l4,0 0,4 -4,0 0,-4z M60,128l4,0 0,4 -4,0 0,-4z M64,128l4,0 0,4 -4,0 0,-4z M72,128l4,0 0,4 -4,0 0,-4z M84,128l4,0 0,4 -4,0 0,-4z M96,128l4,0 0,4 -4,0 0,-4z M100,128l4,0 0,4 -4,0 0,-4z M112,128l4,0 0,4 -4,0 0,-4z M116,128l4,0 0,4 -4,0 0,-4z M124,128l4,0 0,4 -4,0 0,-4z " stroke="transparent" fill="black"/></svg>`;
+$('#qa-qr').innerHTML=ASK_QR;$('#ask-qr2').innerHTML=ASK_QR;
+const qDone=new Set();let qSig='';
+async function loadQs(){try{const r=await fetch(DBURL+'/questions.json');if(!r.ok)return;const o=(await r.json())||{};
+const arr=Object.entries(o).filter(([id,v])=>v&&v.text).map(([id,v])=>({id,...v})).sort((a,b)=>(a.ts||0)-(b.ts||0));
+$('#askn').textContent=arr.length?'('+arr.length+')':'';$('#qa-count').textContent=arr.length;
+const sig=arr.map(x=>x.id+x.text.length).join();if(sig===qSig)return;qSig=sig;
+const box=$('#qa-list'),top=box.scrollTop;box.innerHTML='';
+if(!arr.length)box.innerHTML='<p class="mut">Todavía no hay preguntas.</p>';
+arr.forEach(x=>{const d=document.createElement('div');d.className='qq'+(qDone.has(x.id)?' done':'');d.textContent=x.text;
+const s=document.createElement('small');s.textContent=(x.name?x.name+' · ':'')+(x.ts?new Date(x.ts).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}):'');d.append(s);
+d.onclick=()=>{qDone.has(x.id)?qDone.delete(x.id):qDone.add(x.id);d.classList.toggle('done')};box.append(d)});
+box.scrollTop=top}catch(e){}}
+let qTick=0;setInterval(()=>{if(cur==='s14'||++qTick%4===0)loadQs()},5000);loadQs();
+$('#askbtn').onclick=()=>{SD.click(null);$('#askmodal').hidden=false;loadQs()};$('#askx').onclick=()=>$('#askmodal').hidden=true;
+$('#askmodal').onclick=e=>{if(e.target.id==='askmodal')e.target.hidden=true};
+addEventListener('keydown',e=>{if(e.key==='Escape')$('#askmodal').hidden=true});
 
 /* botones */
 const QUIZ_URLS=['https://gtalex1.github.io/github_pages/quiz/host.html','quiz/host.html','host.html'];

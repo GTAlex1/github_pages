@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Haz tu pregunta</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%230d1117'/%3E%3Cpath d='M14 18h36a4 4 0 0 1 4 4v18a4 4 0 0 1-4 4H30l-10 9v-9h-6a4 4 0 0 1-4-4V22a4 4 0 0 1 4-4z' fill='%23428bbd'/%3E%3Ccircle cx='24' cy='31' r='3' fill='%23fff'/%3E%3Ccircle cx='32' cy='31' r='3' fill='%23fff'/%3E%3Ccircle cx='40' cy='31' r='3' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--line:#30363d;--tx:#e6edf3;--mut:#8b949e;--blue:#428bbd;--blue2:#79b8e8;--ok:#3fb950;--red:#f85149}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 90% 0,rgba(66,139,189,.22),transparent 45%),var(--bg);color:var(--tx);font:17px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+main{max-width:640px;margin:0 auto;padding:28px 18px 60px}
+h1{font-size:36px;line-height:1.1;margin:0 0 8px}h2{font-size:20px;margin:34px 0 10px}.mut{color:var(--mut)}
+input,textarea{width:100%;font:inherit;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--panel);color:var(--tx);outline:none;margin-top:10px}
+textarea{min-height:150px;resize:vertical}input:focus,textarea:focus{border-color:var(--blue)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:10px}
+button{font:700 17px system-ui;border:0;border-radius:12px;padding:13px 22px;cursor:pointer;background:#238636;color:#fff;transition:transform .12s}button:active{transform:scale(.96)}button:disabled{background:#21262d;color:var(--mut)}
+button.del{background:transparent;color:var(--red);border:1px solid var(--line);padding:6px 14px;font-size:14px}
+#st{min-height:1.5em;margin:10px 0 0;font-weight:600}.ok{color:var(--ok)}.bad{color:var(--red)}
+.q{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:12px;padding:14px 16px;margin-top:10px;animation:in .35s}
+.q p{margin:0 0 10px;white-space:pre-wrap;word-break:break-word}.q .meta{display:flex;justify-content:space-between;align-items:center;color:var(--mut);font-size:13px}
+@keyframes in{from{opacity:0;transform:translateY(8px)}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Haz tu pregunta</h1>
+  <p class="mut">Sin registro. Escribe lo que quieras, del tamaño que quieras, en cualquier momento de la presentación. Las veremos todas al final.</p>
+  <input id="name" maxlength="30" placeholder="Tu nombre (opcional)" autocomplete="off">
+  <textarea id="text" maxlength="3000" placeholder="Escribe aquí tu pregunta…"></textarea>
+  <div class="row"><span class="mut" id="cnt">0 / 3000</span><button id="send">Enviar pregunta</button></div>
+  <p id="st"></p>
+  <h2>Tus preguntas</h2>
+  <p class="mut" style="margin-top:-6px;font-size:15px">Se guardan en este navegador. Si ya te la han contestado, puedes borrarla.</p>
+  <div id="mine"><p class="mut">Todavía no has enviado ninguna.</p></div>
+</main>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+const $ = s => document.querySelector(s), cfg = window.FIREBASE_CONFIG;
+if (!cfg || /PEGA/i.test(cfg.apiKey || '') || typeof firebase === 'undefined') { $('#st').textContent = 'Esto todavía no está configurado.'; $('#st').className = 'bad'; $('#send').disabled = true; }
+else {
+  firebase.initializeApp(cfg);
+  const db = firebase.database(), auth = firebase.auth(), SV = firebase.database.ServerValue; let uid = null;
+  $('#text').oninput = () => $('#cnt').textContent = $('#text').value.length + ' / 3000';
+  auth.signInAnonymously().then(() => {      // sesión anónima e invisible: no hay login, solo sirve para reconocer tus preguntas
+    uid = auth.currentUser.uid;
+    db.ref('questions').on('value', s => {
+      const o = s.val() || {}, mine = Object.entries(o).filter(([id, v]) => v && v.uid === uid).sort((a, b) => b[1].ts - a[1].ts), box = $('#mine');
+      box.innerHTML = mine.length ? '' : '<p class="mut">Todavía no has enviado ninguna.</p>';
+      mine.forEach(([id, v]) => {
+        const d = document.createElement('div'); d.className = 'q';
+        const p = document.createElement('p'); p.textContent = v.text;
+        const m = document.createElement('div'); m.className = 'meta';
+        const t = document.createElement('span'); t.textContent = new Date(v.ts).toLocaleString('es-ES', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' });
+        const b = document.createElement('button'); b.className = 'del'; b.textContent = 'Borrar';
+        b.onclick = () => { if (confirm('¿Borrar esta pregunta?')) db.ref('questions/' + id).remove(); };
+        m.append(t, b); d.append(p, m); box.append(d);
+      });
+    });
+  }).catch(e => { $('#st').textContent = 'No se pudo conectar (' + (e.code || e.message) + ').'; $('#st').className = 'bad'; });
+  $('#send').onclick = async () => {
+    const text = $('#text').value.trim(), name = $('#name').value.trim(), st = $('#st'); st.className = '';
+    if (!uid) { st.textContent = 'Conectando… prueba otra vez en un segundo.'; return; }
+    if (!text) { st.textContent = 'Escribe tu pregunta primero.'; st.className = 'bad'; return; }
+    $('#send').disabled = true;
+    try {
+      const q = { text, uid, ts: SV.TIMESTAMP }; if (name) q.name = name;
+      await db.ref('questions').push().set(q);
+      $('#text').value = ''; $('#cnt').textContent = '0 / 3000'; st.textContent = '¡Enviada! Puedes mandar otra cuando quieras.'; st.className = 'ok';
+    } catch (e) { st.textContent = 'No se pudo enviar (' + (e.code || e.message) + ').'; st.className = 'bad'; }
+    $('#send').disabled = false;
+  };
+}
+</script>
+</body>
+</html>

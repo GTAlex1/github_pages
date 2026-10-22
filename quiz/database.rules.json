@@ -3,7 +3,6 @@
     "rooms": {
       "$pin": {
         ".write": "auth != null && !data.exists() && newData.child('host').val() === auth.uid",
-
         "host": {
           ".read": "auth != null",
           ".write": "auth != null && !data.exists() && newData.val() === auth.uid"
@@ -32,17 +31,19 @@
           ".read": "auth != null",
           ".write": "auth != null && newData.parent().child('host').val() === auth.uid"
         },
-
         "players": {
           ".read": "auth != null",
           "$pid": {
             ".write": "auth != null && ($pid === auth.uid || newData.parent().parent().child('host').val() === auth.uid)",
             ".validate": "newData.hasChildren(['name'])",
-            "name": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 16" },
-            "$other": { ".validate": false }
+            "name": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 16"
+            },
+            "$other": {
+              ".validate": false
+            }
           }
         },
-
         "answers": {
           ".read": "auth != null && data.parent().child('host').val() === auth.uid",
           "$q": {
@@ -52,9 +53,27 @@
               ".validate": "newData.hasChildren(['a', 't']) && newData.child('a').isNumber() && newData.child('a').val() >= 0 && newData.child('a').val() <= 3 && newData.child('t').val() === now",
               "a": {},
               "t": {},
-              "$other": { ".validate": false }
+              "$other": {
+                ".validate": false
+              }
             }
           }
+        }
+      }
+    },
+    "questions": {
+      ".read": true,
+      "$id": {
+        ".write": "auth != null && ((!data.exists() && newData.child('uid').val() === auth.uid) || data.child('uid').val() === auth.uid)",
+        ".validate": "newData.hasChildren(['text', 'uid', 'ts']) && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 3000 && newData.child('uid').val() === auth.uid && newData.child('ts').val() === now",
+        "text": {},
+        "uid": {},
+        "ts": {},
+        "name": {
+          ".validate": "newData.isString() && newData.val().length <= 30"
+        },
+        "$other": {
+          ".validate": false
         }
       }
     }
